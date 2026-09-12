@@ -1,0 +1,122 @@
+@import "tailwindcss";
+
+:root {
+  --color-primary: #0b353b;
+  --color-primary-dark: #031f23;
+  --color-accent: #abffae;
+  --color-bg: #ffffff;
+  --color-bg-subtle: #fafaf9;
+  --color-text: #0b353b;
+  --color-text-muted: #4a5c5f;
+  --color-border: rgba(11, 53, 59, 0.12);
+  --shadow-soft: 0 18px 40px rgba(12, 31, 35, 0.06);
+  --radius-button: 9999px;
+  --radius-card: 24px;
+}
+
+@theme inline {
+  --color-background: var(--color-bg);
+  --color-foreground: var(--color-text);
+  --font-sans: "Inter", "Segoe UI", sans-serif;
+  --font-mono: "SFMono-Regular", "Consolas", monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-bg-subtle);
+  color: var(--color-text);
+  font-family: "Inter", "Segoe UI", sans-serif;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+::selection {
+  background: rgba(171, 255, 174, 0.8);
+  color: var(--color-primary-dark);
+}
+
+.brand-shell {
+  background: linear-gradient(180deg, rgba(171, 255, 174, 0.18), rgba(255, 255, 255, 0));
+}
+
+.brand-card {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-soft);
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 9999px;
+  padding: 0.5rem 0.85rem;
+  background: rgba(171, 255, 174, 0.2);
+  color: var(--color-primary);
+  border: 1px solid rgba(11, 53, 59, 0.12);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.cta-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: var(--radius-button);
+  background: var(--color-primary);
+  color: #ffffff;
+  padding: 0.9rem 1.5rem;
+  font-weight: 600;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  box-shadow: inset 0 0 0 1px rgba(171, 255, 174, 0.8);
+}
+
+.cta-primary:hover {
+  transform: translateY(-1px);
+  background: var(--color-primary-dark);
+}
+
+.cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: var(--radius-button);
+  border: 1px solid rgba(11, 53, 59, 0.2);
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--color-primary);
+  padding: 0.9rem 1.5rem;
+  font-weight: 600;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.cta-secondary:hover {
+  transform: translateY(-1px);
+  border-color: rgba(11, 53, 59, 0.5);
+}
+
+.grid-soft {
+  background-image: linear-gradient(rgba(11, 53, 59, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(11, 53, 59, 0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
