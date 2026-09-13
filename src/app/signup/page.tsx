@@ -230,7 +230,7 @@ export default function SignupPage() {
             </Link>
 
             <div className="mt-14 max-w-md">
-              <span className="eyebrow border-white/10 bg-white/8 text-white">Build smarter</span>
+              <span className="eyebrow eyebrow-on-dark">Build smarter</span>
               <h1 className="mt-6 text-4xl font-semibold tracking-[-0.07em] text-white sm:text-5xl">
                 Create a workspace that feels organized from day one.
               </h1>

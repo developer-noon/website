@@ -1,11 +1,12 @@
 import Link from 'next/link';
 import { ArrowRightIcon, ChartBarIcon, CodeBracketIcon, Cog6ToothIcon, EnvelopeIcon, PaintBrushIcon } from '@heroicons/react/24/outline';
+import ImageCard from './components/ImageCard';
 
 const capabilities = [
-  { title: 'Design & UI/UX', detail: 'Figma, landing page strategy, visual systems, and customer-focused interface design.' },
-  { title: 'Development', detail: 'Responsive sites, WordPress builds, React and Next.js experiences, and clean front-end code.' },
-  { title: 'Automation', detail: 'CRM flows, lead routing, form integrations, and platform workflows that reduce manual work.' },
-  { title: 'Digital Operations', detail: 'Website upkeep, content edits, marketing support, and the behind-the-scenes systems that keep businesses moving.' },
+  { title: 'Design & UI/UX', detail: 'Figma, landing page strategy, visual systems, and customer-focused interface design.', image: '/images/Frame 18.svg' },
+  { title: 'Development', detail: 'Responsive sites, WordPress builds, React and Next.js experiences, and clean front-end code.', image: '/images/Frame 19.svg' },
+  { title: 'Automation', detail: 'CRM flows, lead routing, form integrations, and platform workflows that reduce manual work.', image: '/images/Frame 20.svg' },
+  { title: 'Digital Operations', detail: 'Website upkeep, content edits, marketing support, and the behind-the-scenes systems that keep businesses moving.', image: '/images/Frame 21.svg' },
 ];
 
 const proofPoints = [
@@ -45,44 +46,43 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="brand-card grid-soft relative overflow-hidden p-6 sm:p-8">
-            <div className="absolute right-4 top-4 h-24 w-24 rounded-full bg-[#ABFFAE]/50 blur-3xl" />
-            <div className="relative rounded-[28px] bg-[#0B353B] p-6 text-white shadow-[0_20px_50px_rgba(11,53,59,0.32)]">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold uppercase tracking-[0.18em] text-white/70">Performance</span>
-                <span className="rounded-full bg-[#ABFFAE] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[#0B353B]">Live</span>
+          <ImageCard image="/images/Frame 22.svg" className="p-6 sm:p-8">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold uppercase tracking-[0.18em] text-black/65">Performance</span>
+              <span className="rounded-full bg-black px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white">Live</span>
+            </div>
+            <h2 className="mt-8 text-3xl font-semibold tracking-[-0.06em] text-black">Clarity that compounds.</h2>
+            <p className="mt-3 max-w-sm text-sm leading-6 text-black/70">A connected digital system gives your team a clearer path from first click to finished work.</p>
+            <div className="mt-8 space-y-4">
+              <div>
+                <p className="text-4xl font-semibold tracking-[-0.08em] text-black">+40%</p>
+                <p className="mt-2 text-sm text-black/65">Increase in digital clarity and lead flow through cleaner systems.</p>
               </div>
-              <div className="mt-10 space-y-4">
-                <div>
-                  <p className="text-4xl font-semibold tracking-[-0.08em]">+40%</p>
-                  <p className="mt-2 text-sm text-white/70">Increase in digital clarity and lead flow through cleaner systems.</p>
-                </div>
-                <div className="h-2 rounded-full bg-white/10">
-                  <div className="h-full w-[72%] rounded-full bg-[#ABFFAE]" />
-                </div>
-              </div>
-              <div className="mt-10 grid grid-cols-2 gap-4 text-sm text-white/75">
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <div className="text-xl font-semibold text-white">UX</div>
-                  <div className="mt-2">Conversion-first design</div>
-                </div>
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <div className="text-xl font-semibold text-white">Ops</div>
-                  <div className="mt-2">Automation setup</div>
-                </div>
+              <div className="h-2 rounded-full bg-black/10">
+                <div className="h-full w-[72%] rounded-full bg-black" />
               </div>
             </div>
-          </div>
+            <div className="mt-8 grid grid-cols-2 gap-4 text-sm text-black/70">
+              <div className="rounded-2xl border border-black/10 bg-white/35 p-4">
+                <div className="text-xl font-semibold text-black">UX</div>
+                <div className="mt-2">Conversion-first design</div>
+              </div>
+              <div className="rounded-2xl border border-black/10 bg-white/35 p-4">
+                <div className="text-xl font-semibold text-black">Ops</div>
+                <div className="mt-2">Automation setup</div>
+              </div>
+            </div>
+          </ImageCard>
         </div>
       </section>
 
       <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <div className="grid gap-6 md:grid-cols-3">
           {proofPoints.map((item) => (
-            <div key={item.label} className="brand-card p-6 text-left">
-              <div className="text-3xl font-semibold tracking-[-0.06em] text-[#0B353B]">{item.value}</div>
-              <div className="mt-2 text-sm text-[#4A5C5F]">{item.label}</div>
-            </div>
+            <ImageCard key={item.label} image={`/images/Frame ${23 + proofPoints.indexOf(item)}.svg`} className="p-6 text-left">
+              <h3 className="text-3xl font-semibold tracking-[-0.06em] text-black">{item.value}</h3>
+              <p className="mt-2 text-sm text-black/70">{item.label}</p>
+            </ImageCard>
           ))}
         </div>
       </section>
@@ -98,13 +98,13 @@ export default function Home() {
             const CapabilityIcon = [PaintBrushIcon, CodeBracketIcon, Cog6ToothIcon, ChartBarIcon][index];
 
             return (
-            <div key={capability.title} className="brand-card p-6">
+            <ImageCard key={capability.title} image={capability.image} className="p-6">
               <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#ABFFAE] text-[#0B353B]">
                 <CapabilityIcon className="h-6 w-6" aria-hidden="true" />
               </div>
-              <h3 className="text-xl font-semibold tracking-[-0.04em] text-[#0B353B]">{capability.title}</h3>
-              <p className="mt-3 text-sm leading-6 text-[#4A5C5F]">{capability.detail}</p>
-            </div>
+              <h3 className="text-xl font-semibold tracking-[-0.04em] text-black">{capability.title}</h3>
+              <p className="mt-3 text-sm leading-6 text-black/70">{capability.detail}</p>
+            </ImageCard>
             );
           })}
         </div>
@@ -114,7 +114,7 @@ export default function Home() {
         <div className="rounded-[32px] bg-[#0B353B] p-8 text-white sm:p-12 lg:p-16">
           <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-center">
             <div>
-              <span className="eyebrow bg-white/10 text-white border-white/10">How I work</span>
+              <span className="eyebrow eyebrow-on-dark">How I work</span>
               <h2 className="mt-5 text-4xl font-semibold tracking-[-0.06em] text-white sm:text-5xl">Clear systems, thoughtful design, and practical execution.</h2>
             </div>
             <div className="space-y-5 text-base text-white/75">

@@ -79,7 +79,7 @@ export default function LoginPage() {
             </Link>
 
             <div className="mt-14 max-w-md">
-              <span className="eyebrow border-white/10 bg-white/8 text-white">Welcome back</span>
+              <span className="eyebrow eyebrow-on-dark">Welcome back</span>
               <h1 className="mt-6 text-4xl font-semibold tracking-[-0.07em] text-white sm:text-5xl">
                 Access your workspace and move faster.
               </h1>

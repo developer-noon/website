@@ -1,0 +1,44 @@
+<svg width="511" height="674" viewBox="0 0 511 674" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_517_467)">
+<rect width="511" height="673.024" rx="18" fill="black"/>
+<rect width="511" height="673.024" fill="white"/>
+<g opacity="0.18">
+<path d="M20 534H256C386.339 534 492 639.661 492 770H256C125.661 770 20 664.339 20 534Z" fill="#00731F"/>
+<path d="M488.596 298C490.476 298 492 299.524 492 301.404C492 429.863 387.863 534 259.404 534L20 534C20 403.661 125.661 298 256 298L488.596 298Z" fill="#00731F"/>
+</g>
+<foreignObject x="-18" y="-18" width="547" height="709.024"><div xmlns="http://www.w3.org/1999/xhtml" style="backdrop-filter:blur(9px);clip-path:url(#bgblur_1_517_467_clip_path);height:100%;width:100%"></div></foreignObject><rect data-figma-bg-blur-radius="18" width="511" height="673.024" fill="url(#paint0_linear_517_467)" fill-opacity="0.03"/>
+<g filter="url(#filter1_n_517_467)" style="mix-blend-mode:multiply">
+<rect width="511" height="673.024" fill="url(#paint1_linear_517_467)"/>
+</g>
+</g>
+<defs>
+<clipPath id="bgblur_1_517_467_clip_path" transform="translate(18 18)"><rect width="511" height="673.024"/>
+</clipPath><filter id="filter1_n_517_467" x="0" y="0" width="511" height="673.024" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feTurbulence type="fractalNoise" baseFrequency="1.7651664018630981 1.7651664018630981" stitchTiles="stitch" numOctaves="3" result="noise" seed="6245" />
+<feColorMatrix in="noise" type="luminanceToAlpha" result="alphaNoise" />
+<feComponentTransfer in="alphaNoise" result="coloredNoise1">
+<feFuncA type="discrete" tableValues="1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 "/>
+</feComponentTransfer>
+<feComposite operator="in" in2="shape" in="coloredNoise1" result="noise1Clipped" />
+<feFlood flood-color="rgba(0, 0, 0, 0.08)" result="color1Flood" />
+<feComposite operator="in" in2="noise1Clipped" in="color1Flood" result="color1" />
+<feMerge result="effect1_noise_517_467">
+<feMergeNode in="shape" />
+<feMergeNode in="color1" />
+</feMerge>
+</filter>
+<linearGradient id="paint0_linear_517_467" x1="255.5" y1="0" x2="255.5" y2="673.024" gradientUnits="userSpaceOnUse">
+<stop stop-color="#F3F8F2"/>
+<stop offset="1" stop-color="#BFFFBC"/>
+</linearGradient>
+<linearGradient id="paint1_linear_517_467" x1="255.5" y1="0" x2="255.5" y2="673.024" gradientUnits="userSpaceOnUse">
+<stop stop-color="#F3F8F2"/>
+<stop offset="1" stop-color="#A7FFA3"/>
+</linearGradient>
+<clipPath id="clip0_517_467">
+<rect width="511" height="673.024" rx="18" fill="white"/>
+</clipPath>
+</defs>
+</svg>

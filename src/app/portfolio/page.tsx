@@ -1,4 +1,5 @@
 import { ArrowUpRightIcon, ChartBarIcon, CodeBracketIcon, Squares2X2Icon } from '@heroicons/react/24/outline';
+import ImageCard from '../components/ImageCard';
 
 const projects = [
   {
@@ -35,24 +36,24 @@ export default function Portfolio() {
           const ProjectIcon = [ChartBarIcon, Squares2X2Icon, CodeBracketIcon][index];
 
           return (
-          <article key={project.title} className="brand-card flex h-full flex-col p-6">
+          <ImageCard as="article" key={project.title} image={`/images/Frame ${18 + index}.svg`} className="flex h-full flex-col p-6">
             <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-2xl bg-[#ABFFAE] text-[#0B353B]">
               <ProjectIcon className="h-5 w-5" aria-hidden="true" />
             </div>
-            <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#0B353B]">{project.category}</span>
-            <h2 className="mt-5 text-2xl font-semibold tracking-[-0.05em] text-[#0B353B]">{project.title}</h2>
-            <p className="mt-4 text-sm leading-7 text-[#4A5C5F]">{project.description}</p>
+            <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-black">{project.category}</span>
+            <h2 className="mt-5 text-2xl font-semibold tracking-[-0.05em] text-black">{project.title}</h2>
+            <p className="mt-4 text-sm leading-7 text-black/70">{project.description}</p>
             <div className="mt-6 flex flex-wrap gap-2 pt-5">
               {project.tech.map((tech) => (
-                <span key={tech} className="rounded-full bg-[#FAFAF9] px-2.5 py-1 text-[11px] font-medium text-[#0B353B]">
+                <span key={tech} className="rounded-full bg-white/55 px-2.5 py-1 text-[11px] font-medium text-black">
                   {tech}
                 </span>
               ))}
             </div>
-            <div className="mt-auto pt-6 text-right text-[#0B353B]">
+            <div className="mt-auto pt-6 text-right text-black">
               <ArrowUpRightIcon className="ml-auto h-5 w-5" aria-hidden="true" />
             </div>
-          </article>
+          </ImageCard>
           );
         })}
       </section>

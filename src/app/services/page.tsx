@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ArrowRightIcon, CodeBracketIcon, Cog6ToothIcon, PaintBrushIcon, WrenchScrewdriverIcon } from '@heroicons/react/24/outline';
+import ImageCard from '../components/ImageCard';
 
 const servicesList = [
   {
@@ -40,20 +41,20 @@ export default function Services() {
           const ServiceIcon = [CodeBracketIcon, PaintBrushIcon, Cog6ToothIcon, WrenchScrewdriverIcon][index];
 
           return (
-          <div key={service.title} className="brand-card flex h-full flex-col p-8">
+          <ImageCard key={service.title} image={`/images/Frame ${18 + index}.svg`} className="flex h-full flex-col p-8">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#ABFFAE] text-[#0B353B]">
               <ServiceIcon className="h-6 w-6" aria-hidden="true" />
             </div>
-            <h2 className="mt-6 text-2xl font-semibold tracking-[-0.05em] text-[#0B353B]">{service.title}</h2>
-            <p className="mt-4 text-sm leading-7 text-[#4A5C5F]">{service.description}</p>
+            <h2 className="mt-6 text-2xl font-semibold tracking-[-0.05em] text-black">{service.title}</h2>
+            <p className="mt-4 text-sm leading-7 text-black/70">{service.description}</p>
             <div className="mt-6 flex flex-wrap gap-2 pt-5">
               {service.tags.map((tag) => (
-                <span key={tag} className="rounded-full bg-[#FAFAF9] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#0B353B]">
+                <span key={tag} className="rounded-full bg-white/55 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-black">
                   {tag}
                 </span>
               ))}
             </div>
-          </div>
+          </ImageCard>
           );
         })}
       </section>

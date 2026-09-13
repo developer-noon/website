@@ -7,12 +7,13 @@ import Footer from './Footer';
 export default function SiteShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isAuthRoute = pathname === '/login' || pathname === '/signup';
+  const isDashboardRoute = pathname.startsWith('/dashboard');
 
   return (
     <>
-      {!isAuthRoute && <Navbar />}
+      {!isAuthRoute && !isDashboardRoute && <Navbar />}
       <main className="flex-grow">{children}</main>
-      {!isAuthRoute && <Footer />}
+      {!isAuthRoute && !isDashboardRoute && <Footer />}
     </>
   );
 }

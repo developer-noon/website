@@ -62,6 +62,32 @@ img {
   box-shadow: var(--shadow-soft);
 }
 
+.image-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(11, 53, 59, 0.12);
+  border-radius: var(--radius-card);
+  background-color: #f3f8f2;
+  background-image: var(--image-card);
+  background-position: center;
+  background-size: cover;
+  box-shadow: var(--shadow-soft);
+  color: #000000;
+}
+
+.image-card::before {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.45) 58%, rgba(191, 255, 188, 0.2));
+  content: '';
+}
+
+.image-card-content {
+  position: relative;
+  z-index: 1;
+  color: #000000;
+}
+
 .eyebrow {
   display: inline-flex;
   align-items: center;
@@ -75,6 +101,12 @@ img {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+}
+
+.eyebrow-on-dark {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-primary-dark);
 }
 
 .cta-primary {
