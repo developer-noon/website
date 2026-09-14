@@ -1,12 +1,12 @@
 import { renderNewsletterHtml, renderNewsletterPlainText } from './email-template';
-import type { NewsletterBrief, NewsletterCopy, NewsletterDraft } from './types';
+import type { NewsletterBrief, NewsletterCopy, NewsletterDraft, NewsletterResource } from './types';
 
 function firstSentence(value: string, fallback: string) {
   const sentence = value.split(/[.!?]/)[0]?.trim();
   return sentence || fallback;
 }
 
-export function generateNewsletterDraft(brief: NewsletterBrief, copy?: NewsletterCopy): NewsletterDraft {
+export function generateNewsletterDraft(brief: NewsletterBrief, copy?: NewsletterCopy, resources: NewsletterResource[] = []): NewsletterDraft {
   const topic = firstSentence(brief.topic, 'A clearer way forward');
   const audience = firstSentence(brief.audience, 'customers who want practical progress');
   const messages = brief.keyMessages.split(/[\n,]+/).map((message) => message.trim()).filter(Boolean);
@@ -39,6 +39,7 @@ export function generateNewsletterDraft(brief: NewsletterBrief, copy?: Newslette
     status: 'draft' as const,
     style: brief.style,
     tone: brief.tone,
+    resources,
   };
 
   return {

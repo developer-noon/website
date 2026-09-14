@@ -39,6 +39,27 @@ export type NewsletterBrief = {
   style: NewsletterStyle;
 };
 
+export type NewsletterResource = {
+  id: string;
+  title: string;
+  url: string;
+  description: string;
+  source: string;
+  publishedAt?: string;
+  relevance?: number;
+  addedBy: 'ai' | 'manual';
+};
+
+export type NewsletterSession = {
+  id: string;
+  title: string;
+  topic: string;
+  startsOn: string;
+  endsOn: string;
+  status: 'planned' | 'active' | 'ready';
+  resources: NewsletterResource[];
+};
+
 export type NewsletterSection = {
   heading: string;
   body: string;
@@ -71,4 +92,5 @@ export type NewsletterDraft = {
   status: 'draft' | 'approved';
   style: NewsletterStyle;
   tone: NewsletterTone;
+  resources?: NewsletterResource[];
 };

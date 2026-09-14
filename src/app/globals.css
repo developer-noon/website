@@ -147,6 +147,22 @@ img {
   border-color: rgba(11, 53, 59, 0.5);
 }
 
+.input {
+  width: 100%;
+  border: 1px solid rgba(11, 53, 59, 0.12);
+  border-radius: 0.75rem;
+  background: #fafaf9;
+  padding: 0.75rem 0.875rem;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input:focus {
+  border-color: rgba(11, 53, 59, 0.35);
+  box-shadow: 0 0 0 4px rgba(171, 255, 174, 0.3);
+}
+
 .grid-soft {
   background-image: linear-gradient(rgba(11, 53, 59, 0.04) 1px, transparent 1px),
     linear-gradient(90deg, rgba(11, 53, 59, 0.04) 1px, transparent 1px);

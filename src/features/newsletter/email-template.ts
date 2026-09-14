@@ -88,8 +88,9 @@ function renderLayout(draft: Omit<NewsletterDraft, 'html' | 'plainText'>, offerU
   const intro = `<p style="margin:0;font-size:18px;line-height:1.6;color:${preset.text};">${escapeHtml(draft.intro)}</p>`;
   const sections = draft.sections.map((section) => `<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-top:28px;"><tr><td style="border-left:4px solid ${preset.accent};padding-left:16px;"><h2 style="margin:0 0 8px;font-size:21px;line-height:1.25;color:${preset.text};">${escapeHtml(section.heading)}</h2><p style="margin:0;font-size:16px;line-height:1.65;color:${preset.muted};">${escapeHtml(section.body)}</p></td></tr></table>`).join('');
   const offer = `<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-top:32px;background:${preset.accent};"><tr><td style="padding:24px;"><h2 style="margin:0 0 8px;font-size:22px;color:${preset.textOnAccent};">${escapeHtml(draft.offerTitle)}</h2><p style="margin:0 0 18px;font-size:16px;line-height:1.6;color:${preset.textOnAccent};">${escapeHtml(draft.offerBody)}</p><a href="${offerUrl}" style="display:inline-block;background:${preset.primary};color:${preset.textOnPrimary};text-decoration:none;padding:13px 20px;font-weight:bold;">${escapeHtml(draft.callToAction)}</a></td></tr></table>`;
+  const resources = draft.resources?.length ? `<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-top:32px;border-top:1px solid ${preset.borderColor};"><tr><td style="padding-top:24px;"><h2 style="margin:0 0 14px;font-size:21px;color:${preset.text};">Worth your time</h2>${draft.resources.map((resource) => `<p style="margin:0 0 14px;font-size:15px;line-height:1.55;"><a href="${safeUrl(resource.url)}" style="color:${preset.primary};font-weight:bold;">${escapeHtml(resource.title)}</a><br><span style="color:${preset.muted};">${escapeHtml(resource.description)}</span></p>`).join('')}</td></tr></table>` : '';
   const proof = `<p style="margin:30px 0 0;padding-top:24px;border-top:1px solid ${preset.borderColor};font-size:15px;line-height:1.6;color:${preset.muted};"><strong style="color:${preset.text};">What customers are saying:</strong><br>${escapeHtml(draft.socialProof)}</p>`;
-  return `${intro}${sections}${offer}${proof}`;
+  return `${intro}${sections}${resources}${offer}${proof}`;
 }
 
 export function renderNewsletterPlainText(brief: NewsletterBrief, draft: Omit<NewsletterDraft, 'html' | 'plainText'>) {
@@ -103,6 +104,7 @@ export function renderNewsletterPlainText(brief: NewsletterBrief, draft: Omit<Ne
     draft.offerBody,
     `${draft.callToAction}: ${draft.callToActionUrl || brief.offerUrl}`,
     '',
+    ...(draft.resources?.length ? ['', 'Worth your time:', ...draft.resources.flatMap((resource) => [`${resource.title} - ${resource.description}`, resource.url, ''])] : []),
     `What customers are saying: ${draft.socialProof}`,
   ].join('\n');
 }

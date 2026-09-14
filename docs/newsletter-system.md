@@ -59,6 +59,17 @@ src/
 
 The UI, generation contract, and email renderer are deliberately separate. The current generator is a deterministic pilot fallback; an LLM adapter can replace it without changing the editor or export surface.
 
+## Curation and weekly sessions
+
+The newsletter dashboard is organized into four tabs: `Brand theme`, `Sessions`, `Submissions`, and `Newsletter`. A session represents one week and owns the resources selected for that send. Sessions and resources are stored in the `newsletter_sessions` MongoDB collection, scoped by the authenticated user id.
+
+The Submissions tab supports two paths:
+
+- Automated research uses the configured Gemini API only for article discovery using the topic and audience, then presents candidates for review. Newsletter copy generation remains deterministic.
+- Manual submissions fetch page metadata from a supplied `http` or `https` URL and generate a short source description.
+
+Every candidate can be assigned to any existing session. Sessions are Friday-based and store their articles hierarchically in the same MongoDB document. The Newsletter tab sends the selected session resources through the existing deterministic email renderer, which keeps one stable layout and adds a `Worth your time` resource section. Brand theme settings are stored in a user-owned profile document; visual direction presets are selected per newsletter without creating alternate email templates.
+
 ## Visual direction system
 
 The studio keeps content structure separate from visual direction. A client can switch between eight presets without rewriting the brief:
