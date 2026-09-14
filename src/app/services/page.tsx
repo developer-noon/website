@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowRightIcon, CodeBracketIcon, Cog6ToothIcon, PaintBrushIcon, WrenchScrewdriverIcon } from '@heroicons/react/24/outline';
 import ImageCard from '../components/ImageCard';
+import ServicesAccordion from './ServicesAccordion';
 
 const servicesList = [
   {
@@ -58,6 +59,8 @@ export default function Services() {
           );
         })}
       </section>
+
+      <ServicesAccordion />
 
       <section className="mt-16 rounded-[32px] bg-[#0B353B] p-8 text-white sm:p-12">
         <h3 className="text-3xl font-semibold tracking-[-0.05em] sm:text-4xl">Need a custom technical setup?</h3>
