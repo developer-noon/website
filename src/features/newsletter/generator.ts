@@ -22,6 +22,23 @@ export function generateNewsletterDraft(brief: NewsletterBrief, copy?: Newslette
       body: messages[1] ? `${messages[1]} We have shaped this into a simple action you can use immediately, with less friction and more clarity.` : 'Start with one focused improvement, measure what changes, and build from there. Small, deliberate decisions compound into better outcomes.',
     },
   ];
+  const articleCards: Array<{ id: string; title: string; url: string; description: string; source: string; imageUrl?: string; publishedAt?: string; relevance?: number; addedBy: 'manual' | 'ai'; }> = (brief.articles?.length ? brief.articles : resources.length ? resources.map((resource) => ({
+    id: resource.id,
+    title: resource.title,
+    url: resource.url,
+    description: resource.description,
+    source: resource.source,
+    imageUrl: '',
+  })) : []).map((article, index) => ({
+    id: article.id ?? `article-${index}`,
+    title: article.title,
+    url: article.url || '#',
+    description: article.description || 'A useful read for your audience.',
+    source: article.source ?? 'Article',
+    publishedAt: '',
+    relevance: 100,
+    addedBy: 'manual' as const,
+  }));
   const draftWithoutOutput = {
     subjectLines: copy?.subjectLines ?? [
       `${topic}: a practical idea for this week`,
@@ -39,7 +56,7 @@ export function generateNewsletterDraft(brief: NewsletterBrief, copy?: Newslette
     status: 'draft' as const,
     style: brief.style,
     tone: brief.tone,
-    resources,
+    resources: articleCards,
   };
 
   return {

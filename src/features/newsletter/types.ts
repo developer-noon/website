@@ -10,6 +10,28 @@ export type NewsletterStyle =
 
 export type NewsletterTone = 'professional' | 'friendly' | 'conversational' | 'bold' | 'warm' | 'concise';
 
+export type NewsletterArticle = {
+  id?: string;
+  title: string;
+  url: string;
+  description: string;
+  imageUrl?: string;
+  source?: string;
+};
+
+export type NewsletterProduct = {
+  id?: string;
+  title: string;
+  price: string;
+  url: string;
+  imageUrl?: string;
+};
+
+export type NewsletterSocialLink = {
+  label: 'facebook' | 'twitter' | 'instagram' | 'linkedin';
+  url: string;
+};
+
 export type NewsletterBrief = {
   businessName: string;
   audience: string;
@@ -37,6 +59,14 @@ export type NewsletterBrief = {
   footerNote: string;
   fontFamily: string;
   style: NewsletterStyle;
+  showHeader?: boolean;
+  showReadSection?: boolean;
+  showProductSection?: boolean;
+  showBrandInfo?: boolean;
+  showFooter?: boolean;
+  articles?: NewsletterArticle[];
+  products?: NewsletterProduct[];
+  socialLinks?: NewsletterSocialLink[];
 };
 
 export type NewsletterResource = {
