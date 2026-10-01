@@ -12,7 +12,7 @@ export default function ImageCard({ image, children, className = '', as = 'div' 
   const style = { '--image-card': `url("${image}")` } as CSSProperties;
 
   return (
-    <Tag className={`image-card ${className}`} style={style}>
+    <Tag className={`image-card reveal-up ${className}`} style={style}>
       <div className="image-card-content">{children}</div>
     </Tag>
   );

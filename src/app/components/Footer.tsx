@@ -1,7 +1,16 @@
+'use client';
+
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { EnvelopeIcon } from '@heroicons/react/24/outline';
 
 export default function Footer() {
+  const [year, setYear] = useState(2026);
+
+  useEffect(() => {
+    setYear(new Date().getFullYear());
+  }, []);
+
   return (
     <footer className="border-t border-[#0B353B]/10 bg-[#0B353B] text-white">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
@@ -35,7 +44,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 border-t border-white/10 pt-8 text-center text-xs text-white/50">
-          © {new Date().getFullYear()} Hammad Younus. All rights reserved.
+          © {year} Hammad Younus. All rights reserved.
         </div>
       </div>
     </footer>

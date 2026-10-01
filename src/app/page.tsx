@@ -23,18 +23,18 @@ export default function Home() {
           <div className="max-w-xl">
             <span className="eyebrow">Web Developer · UI/UX Designer · Automation Specialist</span>
             <h1 className="mt-6 text-5xl font-semibold tracking-[-0.07em] text-[#0B353B] sm:text-6xl lg:text-7xl">
-              Building digital systems that feel clear, useful, and ready to grow.
+              Stop juggling tech and operations. Let’s build and scale your infrastructure.
             </h1>
             <p className="mt-6 text-lg text-[#4A5C5F] sm:text-xl">
-              I help businesses turn websites, funnels, and operational workflows into polished experiences that drive real results.
+              From custom full-stack development to automated backend operations, devenoon empowers your business with the technical leverage it needs to grow.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <Link href="/portfolio" className="cta-primary">
-                View work
+                Book a Discovery Call
                 <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
               </Link>
               <Link href="/contact" className="cta-secondary">
-                Get in touch
+                About Me
                 <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
               </Link>
             </div>
@@ -151,6 +151,43 @@ export default function Home() {
             </div>
           </div>
         </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8" aria-labelledby="home-principles-heading">
+        <div className="grid gap-10 lg:grid-cols-[0.7fr_1.3fr] lg:items-start">
+          <div>
+            <span className="eyebrow">The signal</span>
+            <h2 id="home-principles-heading" className="mt-4 text-3xl font-semibold tracking-[-0.06em] text-[#0B353B] sm:text-5xl">Good digital work should make the next decision easier.</h2>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-3">
+            {[
+              ['Clarity', 'Less noise, stronger hierarchy, and a direct route to action.'],
+              ['Confidence', 'Systems that feel considered for both customers and teams.'],
+              ['Progress', 'Practical improvements that can be measured and extended.'],
+            ].map(([title, detail]) => (
+              <div key={title} className="brand-card p-6"><h3 className="text-lg font-semibold text-[#0B353B]">{title}</h3><p className="mt-3 text-sm leading-6 text-[#4A5C5F]">{detail}</p></div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8" aria-labelledby="home-stack-heading">
+        <div className="rounded-[32px] bg-[#E8F4E4] p-8 sm:p-12">
+          <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
+            <div className="max-w-2xl"><span className="eyebrow">A connected stack</span><h2 id="home-stack-heading" className="mt-4 text-3xl font-semibold tracking-[-0.06em] text-[#0B353B] sm:text-4xl">Design, code, content, and operations working as one.</h2></div>
+            <p className="max-w-sm text-sm leading-7 text-[#4A5C5F]">The strongest outcomes come from treating the customer journey and the internal workflow as one connected system.</p>
+          </div>
+          <div className="mt-10 flex flex-wrap gap-3 text-sm font-semibold text-[#0B353B]"><span className="rounded-full bg-white px-4 py-2">Strategy</span><span className="rounded-full bg-white px-4 py-2">Interface</span><span className="rounded-full bg-white px-4 py-2">Development</span><span className="rounded-full bg-white px-4 py-2">Automation</span><span className="rounded-full bg-white px-4 py-2">Optimization</span></div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8" aria-labelledby="home-audience-heading">
+        <div className="max-w-2xl"><span className="eyebrow">Built for movement</span><h2 id="home-audience-heading" className="mt-4 text-3xl font-semibold tracking-[-0.06em] text-[#0B353B] sm:text-5xl">For teams that are ready to make the work feel lighter.</h2></div>
+        <div className="mt-8 grid gap-4 md:grid-cols-3"><div className="brand-card p-6"><span className="font-mono text-sm text-[#3C853C]">01</span><h3 className="mt-7 text-xl font-semibold text-[#0B353B]">Growing businesses</h3><p className="mt-3 text-sm leading-6 text-[#4A5C5F]">Create a digital presence that can keep pace with the next stage.</p></div><div className="brand-card p-6"><span className="font-mono text-sm text-[#3C853C]">02</span><h3 className="mt-7 text-xl font-semibold text-[#0B353B]">Busy operators</h3><p className="mt-3 text-sm leading-6 text-[#4A5C5F]">Reduce repetitive work and bring scattered tools into a clearer flow.</p></div><div className="brand-card p-6"><span className="font-mono text-sm text-[#3C853C]">03</span><h3 className="mt-7 text-xl font-semibold text-[#0B353B]">New ideas</h3><p className="mt-3 text-sm leading-6 text-[#4A5C5F]">Turn an early concept into an experience people can understand and use.</p></div></div>
+      </section>
+
+      <section className="mx-auto max-w-5xl px-4 py-16 text-center sm:px-6 lg:px-8" aria-labelledby="home-start-heading">
+        <div className="rounded-[32px] border border-[#0B353B]/10 bg-white/70 p-8 sm:p-12"><span className="eyebrow">Start with the question</span><h2 id="home-start-heading" className="mx-auto mt-5 max-w-2xl text-3xl font-semibold tracking-[-0.06em] text-[#0B353B] sm:text-5xl">What would feel noticeably better three months from now?</h2><p className="mx-auto mt-4 max-w-xl text-base leading-7 text-[#4A5C5F]">That answer is usually enough to find the right first move.</p><Link href="/contact" className="cta-primary mt-8">Map the first move <ArrowRightIcon className="h-4 w-4" aria-hidden="true" /></Link></div>
       </section>
 
       <section className="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8">

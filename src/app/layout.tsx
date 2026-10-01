@@ -17,8 +17,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-scroll-behavior="smooth">
-      <body className={`${inter.className} min-h-screen flex flex-col antialiased bg-[#FAFAF9] text-[#0B353B]`}>
+    <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
+      <body className={`${inter.className} min-h-screen flex flex-col antialiased bg-[#FAFAF9] text-[#0B353B]`} suppressHydrationWarning>
         <SessionProvider>
           <SiteShell>{children}</SiteShell>
         </SessionProvider>

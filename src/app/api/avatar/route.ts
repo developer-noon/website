@@ -24,7 +24,7 @@ export function GET(request: NextRequest) {
     .join('')
     .toUpperCase();
   const safeInitials = escapeXml(initials || 'U');
-  const image = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><rect width="128" height="128" rx="64" fill="#ABFFAE"/><text x="64" y="68" fill="#0B353B" font-family="Arial, sans-serif" font-size="44" font-weight="700" text-anchor="middle" dominant-baseline="middle">${safeInitials}</text></svg>`;
+  const image = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><rect width="128" height="128" rx="64" fill="#000000"/><text x="64" y="68" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="44" font-weight="700" text-anchor="middle" dominant-baseline="middle">${safeInitials}</text></svg>`;
 
   return new Response(image, {
     headers: {

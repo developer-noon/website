@@ -9,7 +9,7 @@ type Tab = 'theme' | 'sessions' | 'submissions' | 'newsletter';
 
 const initialBrief: NewsletterBrief = {
   businessName: '', audience: '', voice: 'clear, helpful, and confident', tone: 'professional', topic: '', keyMessages: '', offer: '', offerUrl: '', socialProof: '', callToAction: 'Explore the offer',
-  primaryColor: '#0B353B', secondaryColor: '#4A5C5F', accentColor: '#ABFFAE', backgroundColor: '#F3F7F6', surfaceColor: '#FFFFFF', textColor: '#0B353B', mutedColor: '#4A5C5F', textOnPrimaryColor: '#FFFFFF', textOnAccentColor: '#0B353B', borderColor: '#DCE7E5', logoUrl: '', websiteUrl: '', brandTagline: '', footerNote: '', fontFamily: 'Arial, Helvetica, sans-serif', style: 'minimal-editorial',
+  primaryColor: '#000000', secondaryColor: '#000000', accentColor: '#000000', backgroundColor: '#F3F7F6', surfaceColor: '#FFFFFF', textColor: '#000000', mutedColor: '#000000', textOnPrimaryColor: '#FFFFFF', textOnAccentColor: '#FFFFFF', borderColor: '#000000', logoUrl: '', websiteUrl: '', brandTagline: '', footerNote: '', fontFamily: 'Arial, Helvetica, sans-serif', style: 'minimal-editorial',
 };
 
 export default function NewsletterStudio() {

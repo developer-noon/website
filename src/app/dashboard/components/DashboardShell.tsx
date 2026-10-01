@@ -22,13 +22,13 @@ export default function DashboardShell({ children, user }: { children: React.Rea
   const isNewsletterRoute = pathname.startsWith('/dashboard/newsletter');
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-[#111827]">
+    <div className="min-h-screen bg-[#F3F7F3] text-[#0B353B]">
       {isNewsletterRoute ? <div className={`fixed inset-0 z-50 bg-[#111827]/20 transition lg:hidden ${isSidebarOpen ? 'visible opacity-100' : 'pointer-events-none invisible opacity-0'}`} onClick={() => setIsSidebarOpen(false)} aria-hidden="true" /> : null}
       {isNewsletterRoute ? <aside className={`fixed inset-y-0 left-0 z-50 w-[248px] border-r border-[#E5E7EB] bg-white px-4 py-5 transition-transform lg:block lg:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex items-center justify-between border-b border-[#E5E7EB] px-2 pb-5">
-          <Link href="/dashboard" className="flex items-center gap-2 text-lg font-bold tracking-[-0.04em] text-[#111827]">
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#2563EB] text-white"><ChartBarIcon className="h-4 w-4" aria-hidden="true" /></span>
-            Hammad<span className="text-[#2563EB]">.</span>
+          <Link href="/dashboard" className="flex items-center gap-2 text-lg font-bold tracking-[-0.04em] text-[#0B353B]">
+            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#0B353B] text-[#B9FF8F]"><ChartBarIcon className="h-4 w-4" aria-hidden="true" /></span>
+            Hammad<span className="text-[#3C853C]">.</span>
           </Link>
           <button type="button" className="rounded-md border border-[#D1D5DB] p-1 text-[#6B7280] lg:hidden" onClick={() => setIsSidebarOpen(false)} aria-label="Close workspace navigation"><XMarkIcon className="h-3.5 w-3.5" aria-hidden="true" /></button>
         </div>
@@ -68,7 +68,7 @@ export default function DashboardShell({ children, user }: { children: React.Rea
 }
 
 function SidebarLink({ href, icon, label, active = false, onNavigate }: { href: string; icon: React.ReactNode; label: string; active?: boolean; onNavigate?: () => void }) {
-  return <Link href={href} onClick={onNavigate} className={`relative flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition ${active ? 'bg-[#EFF6FF] text-[#2563EB] before:absolute before:left-0 before:h-6 before:w-0.5 before:rounded-full before:bg-[#2563EB]' : 'text-[#374151] hover:bg-[#F3F4F6]'}`}>
+  return <Link href={href} onClick={onNavigate} className={`relative flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition ${active ? 'bg-[#E6F4E3] text-[#0B353B] before:absolute before:left-0 before:h-6 before:w-0.5 before:rounded-full before:bg-[#3C853C]' : 'text-[#374151] hover:bg-[#EAF2E8]'}`}>
     {icon}<span>{label}</span>
   </Link>;
 }

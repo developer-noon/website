@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { Bars3Icon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { usePathname } from 'next/navigation';
 
 const navLinks = [
   { name: 'Home', path: '/' },
@@ -16,6 +17,7 @@ const navLinks = [
 
 export default function Navbar() {
   const { data: session, status } = useSession();
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isGoogleSubmitting, setIsGoogleSubmitting] = useState(false);
@@ -34,8 +36,8 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-[#0B353B]/10 bg-white/80 backdrop-blur-xl">
       <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="text-[1.3rem] font-extrabold tracking-[-0.05em] text-[#0B353B]">
-          Hammad<span className="text-[#0B353B]">.</span>
+        <Link href="/" className="flex items-center" aria-label="Hammad Younus home">
+          <Image src="/logo.svg" alt="Hammad Younus" width={78} height={51} className="h-12 w-auto object-contain" priority />
         </Link>
 
         <div className="hidden items-center gap-8 md:flex">
@@ -43,7 +45,7 @@ export default function Navbar() {
             <Link
               key={link.path}
               href={link.path}
-              className="text-sm font-medium text-[#4A5C5F] transition-colors hover:text-[#0B353B]"
+              className={`relative text-sm font-medium transition-colors hover:text-[#0B353B] ${pathname === link.path ? 'text-[#0B353B] after:absolute after:-bottom-3 after:left-0 after:h-1 after:w-5 after:rounded-full after:bg-[#73DF42]' : 'text-[#4A5C5F]'}`}
             >
               {link.name}
             </Link>
