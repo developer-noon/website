@@ -214,9 +214,12 @@ h6 {
 .auth-promo-panel h1,
 .auth-promo-panel h2,
 .auth-promo-panel h3,
-.auth-promo-panel p,
 .auth-promo-panel a {
   color: #ffffff !important;
+}
+
+.auth-promo-panel .auth-promo-copy {
+  color: #000000 !important;
 }
 
 [class*="text-[#0B353B]"],

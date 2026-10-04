@@ -83,7 +83,7 @@ export default function LoginPage() {
               <h1 className="mt-6 text-4xl font-semibold tracking-[-0.07em] text-white sm:text-5xl">
                 Access your workspace and move faster.
               </h1>
-              <p className="mt-5 text-base text-white/75">
+              <p className="auth-promo-copy mt-5 text-base text-black">
                 Keep projects, leads, and digital workflows organized in one place with a cleaner customer experience behind the scenes.
               </p>
             </div>
@@ -98,7 +98,7 @@ export default function LoginPage() {
                   <span className="mt-1 inline-flex h-6 w-6 items-center justify-center rounded-none bg-[#ABFFAE] text-[#0B353B]">
                     <CheckIcon className="h-4 w-4" aria-hidden="true" />
                   </span>
-                  <p className="text-sm text-white/80">{item}</p>
+                  <p className="auth-promo-copy text-sm text-black">{item}</p>
                 </div>
               ))}
             </div>
