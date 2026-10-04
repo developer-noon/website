@@ -105,7 +105,7 @@ export default function LoginPage() {
           </div>
         </section>
 
-        <section className="flex items-center justify-center bg-[#F9FCFC] px-5 py-8 sm:px-8 lg:px-12">
+        <section className="flex items-center justify-center bg-[#F9FCFC] px-5 py-8 text-[#0B353B] sm:px-8 lg:px-12">
           <div className="w-full max-w-md">
             <div className="mb-8 text-left">
               <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#4A5C5F]">Login</p>
