@@ -221,7 +221,7 @@ export default function SignupPage() {
           </div>
         </section>
 
-        <section className="relative overflow-hidden bg-[#0B353B] px-6 py-10 text-white sm:px-10 sm:py-14">
+        <section className="auth-promo-panel relative overflow-hidden bg-[#0B353B] px-6 py-10 text-white sm:px-10 sm:py-14">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(171,255,174,0.18),_transparent_35%)]" />
 
           <div className="relative z-10">
