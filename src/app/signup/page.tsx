@@ -77,7 +77,7 @@ export default function SignupPage() {
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(171,255,174,0.22),_transparent_32%),linear-gradient(135deg,#f7f9f9_0%,#ffffff_100%)] px-4 py-10 sm:px-6 lg:px-8">
       <div className="mx-auto grid max-w-6xl overflow-hidden rounded-none border border-[#0B353B]/10 bg-white shadow-[0_25px_80px_rgba(11,53,59,0.08)] lg:grid-cols-[0.96fr_1.04fr]">
-        <section className="flex items-center justify-center bg-[#F9FCFC] px-5 py-8 sm:px-8 lg:px-12">
+        <section className="flex items-center justify-center bg-[#F9FCFC] px-5 py-8 text-[#0B353B] sm:px-8 lg:px-12">
           <div className="w-full max-w-md">
             <div className="mb-8 text-left">
               <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#4A5C5F]">Create account</p>
