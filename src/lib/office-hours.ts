@@ -1,7 +1,7 @@
 export const ALLOWED_OFFICE_HOUR_CLIENTS = ['SUMMER HUNTINGTON', 'PERIOP CONCEPTS', 'Ava Taylor'] as const;
 
 export type OfficeHoursClient = { id: string; name: string; company: string; rate: number; status: 'Active' | 'Archived' };
-export type OfficeHoursEntry = { id: string; date: string; arrival: string; leaving: string; clientId: string; task: string; hours: string; cycleId: string };
+export type OfficeHoursEntry = { id: string; date: string; arrival: string; leaving: string; clientId: string; task: string; hours: string; cycleId: string; startedAt?: string; stoppedAt?: string };
 export type OfficeHoursStore = {
   clients: OfficeHoursClient[];
   entries: OfficeHoursEntry[];
@@ -10,6 +10,7 @@ export type OfficeHoursStore = {
   exchangeRate: number;
   officeStart: string;
   officeEnd: string;
+  activeTimer?: { entryId: string; startedAt: string };
 };
 
 export function allowedClientName(name: string) {
