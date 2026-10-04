@@ -206,6 +206,19 @@ h6 {
   background: var(--color-primary) !important;
 }
 
+.auth-promo-panel {
+  background: #0B353B !important;
+  color: #ffffff !important;
+}
+
+.auth-promo-panel h1,
+.auth-promo-panel h2,
+.auth-promo-panel h3,
+.auth-promo-panel p,
+.auth-promo-panel a {
+  color: #ffffff !important;
+}
+
 [class*="text-[#0B353B]"],
 [class*="text-[#0b353b]"],
 [class*="text-[#3C853C]"],
