@@ -13,8 +13,8 @@
   --color-text-muted: #64748b;
   --color-border: #e2e8f0;
   --shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.12);
-  --radius-button: 9999px;
-  --radius-card: 20px;
+  --radius-button:  0;
+  --radius-card:  0;
 }
 
 @theme inline {
@@ -103,7 +103,7 @@ h6 {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  border-radius: 9999px;
+  border-radius: 0;
   padding: 0.5rem 0.85rem;
   background: var(--color-primary);
   color: #ffffff;
@@ -125,7 +125,7 @@ h6 {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  border-radius: var(--radius-button);
+  border-radius: 0;
   background: var(--color-primary);
   color: #ffffff;
   padding: 0.9rem 1.5rem;
@@ -144,7 +144,7 @@ h6 {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  border-radius: var(--radius-button);
+  border-radius: 0;
   border: 1px solid rgba(0, 0, 0, 0.2);
   background: rgba(255, 255, 255, 0.9);
   color: var(--color-primary);
@@ -161,7 +161,7 @@ h6 {
 .input {
   width: 100%;
   border: 1px solid var(--color-border);
-  border-radius: 0.75rem;
+  border-radius: 0;
   background: var(--color-surface);
   padding: 0.75rem 0.875rem;
   font-size: 0.875rem;
@@ -192,7 +192,7 @@ h6 {
   width: 22rem;
   height: 22rem;
   border: 1px solid var(--color-border);
-  border-radius: 50%;
+  border-radius: 0;
   content: '';
   pointer-events: none;
 }

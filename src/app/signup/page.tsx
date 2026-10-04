@@ -76,7 +76,7 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(171,255,174,0.22),_transparent_32%),linear-gradient(135deg,#f7f9f9_0%,#ffffff_100%)] px-4 py-10 sm:px-6 lg:px-8">
-      <div className="mx-auto grid max-w-6xl overflow-hidden rounded-[32px] border border-[#0B353B]/10 bg-white shadow-[0_25px_80px_rgba(11,53,59,0.08)] lg:grid-cols-[0.96fr_1.04fr]">
+      <div className="mx-auto grid max-w-6xl overflow-hidden rounded-none border border-[#0B353B]/10 bg-white shadow-[0_25px_80px_rgba(11,53,59,0.08)] lg:grid-cols-[0.96fr_1.04fr]">
         <section className="flex items-center justify-center bg-[#F9FCFC] px-5 py-8 sm:px-8 lg:px-12">
           <div className="w-full max-w-md">
             <div className="mb-8 text-left">
@@ -86,7 +86,7 @@ export default function SignupPage() {
 
             <form onSubmit={handleSubmit} className="space-y-5">
               {error ? (
-                <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                <div className="rounded-none border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
                   {error}
                 </div>
               ) : null}
@@ -100,7 +100,7 @@ export default function SignupPage() {
                   type="text"
                   value={form.fullName}
                   onChange={(event) => handleChange('fullName', event.target.value)}
-                  className="w-full rounded-2xl border border-[#0B353B]/10 bg-white px-4 py-3.5 text-base text-[#0B353B] outline-none transition focus:border-[#0B353B]/30 focus:ring-4 focus:ring-[#ABFFAE]/30"
+                  className="w-full rounded-none border border-[#0B353B]/10 bg-white px-4 py-3.5 text-base text-[#0B353B] outline-none transition focus:border-[#0B353B]/30 focus:ring-4 focus:ring-[#ABFFAE]/30"
                   placeholder="John Smith"
                   required
                 />
@@ -115,7 +115,7 @@ export default function SignupPage() {
                   type="email"
                   value={form.email}
                   onChange={(event) => handleChange('email', event.target.value)}
-                  className="w-full rounded-2xl border border-[#0B353B]/10 bg-white px-4 py-3.5 text-base text-[#0B353B] outline-none transition focus:border-[#0B353B]/30 focus:ring-4 focus:ring-[#ABFFAE]/30"
+                  className="w-full rounded-none border border-[#0B353B]/10 bg-white px-4 py-3.5 text-base text-[#0B353B] outline-none transition focus:border-[#0B353B]/30 focus:ring-4 focus:ring-[#ABFFAE]/30"
                   placeholder="you@example.com"
                   required
                 />
@@ -131,7 +131,7 @@ export default function SignupPage() {
                     type="tel"
                     value={form.phone}
                     onChange={(event) => handleChange('phone', event.target.value)}
-                    className="w-full rounded-2xl border border-[#0B353B]/10 bg-white px-4 py-3.5 text-base text-[#0B353B] outline-none transition focus:border-[#0B353B]/30 focus:ring-4 focus:ring-[#ABFFAE]/30"
+                    className="w-full rounded-none border border-[#0B353B]/10 bg-white px-4 py-3.5 text-base text-[#0B353B] outline-none transition focus:border-[#0B353B]/30 focus:ring-4 focus:ring-[#ABFFAE]/30"
                     placeholder="+1 234 567 890"
                   />
                 </div>
@@ -145,7 +145,7 @@ export default function SignupPage() {
                     type="text"
                     value={form.company}
                     onChange={(event) => handleChange('company', event.target.value)}
-                    className="w-full rounded-2xl border border-[#0B353B]/10 bg-white px-4 py-3.5 text-base text-[#0B353B] outline-none transition focus:border-[#0B353B]/30 focus:ring-4 focus:ring-[#ABFFAE]/30"
+                    className="w-full rounded-none border border-[#0B353B]/10 bg-white px-4 py-3.5 text-base text-[#0B353B] outline-none transition focus:border-[#0B353B]/30 focus:ring-4 focus:ring-[#ABFFAE]/30"
                     placeholder="Your company"
                   />
                 </div>
@@ -161,7 +161,7 @@ export default function SignupPage() {
                     type={showPassword ? 'text' : 'password'}
                     value={form.password}
                     onChange={(event) => handleChange('password', event.target.value)}
-                    className="w-full rounded-2xl border border-[#0B353B]/10 bg-white px-4 py-3.5 pr-12 text-base text-[#0B353B] outline-none transition focus:border-[#0B353B]/30 focus:ring-4 focus:ring-[#ABFFAE]/30"
+                    className="w-full rounded-none border border-[#0B353B]/10 bg-white px-4 py-3.5 pr-12 text-base text-[#0B353B] outline-none transition focus:border-[#0B353B]/30 focus:ring-4 focus:ring-[#ABFFAE]/30"
                     placeholder="Create a password"
                     required
                   />
@@ -186,7 +186,7 @@ export default function SignupPage() {
                     type={showConfirmPassword ? 'text' : 'password'}
                     value={form.confirmPassword}
                     onChange={(event) => handleChange('confirmPassword', event.target.value)}
-                    className="w-full rounded-2xl border border-[#0B353B]/10 bg-white px-4 py-3.5 pr-12 text-base text-[#0B353B] outline-none transition focus:border-[#0B353B]/30 focus:ring-4 focus:ring-[#ABFFAE]/30"
+                    className="w-full rounded-none border border-[#0B353B]/10 bg-white px-4 py-3.5 pr-12 text-base text-[#0B353B] outline-none transition focus:border-[#0B353B]/30 focus:ring-4 focus:ring-[#ABFFAE]/30"
                     placeholder="Confirm your password"
                     required
                   />
@@ -202,7 +202,7 @@ export default function SignupPage() {
               </div>
 
               <label className="flex items-start gap-3 text-sm text-[#4A5C5F]">
-                <input type="checkbox" className="mt-1 h-4 w-4 rounded border-[#0B353B]/20 text-[#0B353B]" required />
+                <input type="checkbox" className="mt-1 h-4 w-4 rounded-none border-[#0B353B]/20 text-[#0B353B]" required />
                 <span>I agree to the <a href="#" className="font-semibold text-[#0B353B] underline-offset-2 hover:underline">terms</a> and <a href="#" className="font-semibold text-[#0B353B] underline-offset-2 hover:underline">privacy policy</a>.</span>
               </label>
 
@@ -239,15 +239,15 @@ export default function SignupPage() {
               </p>
             </div>
 
-            <div className="mt-12 rounded-[28px] border border-white/10 bg-white/5 p-5">
+            <div className="mt-12 rounded-none border border-white/10 bg-white/5 p-5">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/60">Why teams choose this</p>
               <div className="mt-6 space-y-5">
                 <div>
                   <div className="text-3xl font-semibold tracking-[-0.06em] text-white">+40%</div>
                   <p className="mt-2 text-sm text-white/75">More visibility into conversion and client workflows.</p>
                 </div>
-                <div className="h-2 rounded-full bg-white/10">
-                  <div className="h-full w-[72%] rounded-full bg-[#ABFFAE]" />
+                <div className="h-2 rounded-none bg-white/10">
+                  <div className="h-full w-[72%] rounded-none bg-[#ABFFAE]" />
                 </div>
               </div>
             </div>

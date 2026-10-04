@@ -69,7 +69,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(171,255,174,0.22),_transparent_32%),linear-gradient(135deg,#f7f9f9_0%,#ffffff_100%)] px-4 py-10 sm:px-6 lg:px-8">
-      <div className="mx-auto grid max-w-6xl overflow-hidden rounded-[32px] border border-[#0B353B]/10 bg-white shadow-[0_25px_80px_rgba(11,53,59,0.08)] lg:grid-cols-[1.02fr_0.98fr]">
+      <div className="mx-auto grid max-w-6xl overflow-hidden rounded-none border border-[#0B353B]/10 bg-white shadow-[0_25px_80px_rgba(11,53,59,0.08)] lg:grid-cols-[1.02fr_0.98fr]">
         <section className="relative overflow-hidden bg-[#0B353B] px-6 py-10 text-white sm:px-10 sm:py-14">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(171,255,174,0.18),_transparent_35%)]" />
 
@@ -94,8 +94,8 @@ export default function LoginPage() {
                 'Manage modern landing pages and campaigns',
                 'Simplify operational workflows with fewer handoffs',
               ].map((item) => (
-                <div key={item} className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <span className="mt-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#ABFFAE] text-[#0B353B]">
+                <div key={item} className="flex items-start gap-3 rounded-none border border-white/10 bg-white/5 p-4">
+                  <span className="mt-1 inline-flex h-6 w-6 items-center justify-center rounded-none bg-[#ABFFAE] text-[#0B353B]">
                     <CheckIcon className="h-4 w-4" aria-hidden="true" />
                   </span>
                   <p className="text-sm text-white/80">{item}</p>
@@ -114,7 +114,7 @@ export default function LoginPage() {
 
             <form onSubmit={handleSubmit} className="space-y-5">
               {error ? (
-                <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                <div className="rounded-none border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
                   {error}
                 </div>
               ) : null}
@@ -128,7 +128,7 @@ export default function LoginPage() {
                   type="email"
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
-                  className="w-full rounded-2xl border border-[#0B353B]/10 bg-white px-4 py-3.5 text-base text-[#0B353B] outline-none transition focus:border-[#0B353B]/30 focus:ring-4 focus:ring-[#ABFFAE]/30"
+                  className="w-full rounded-none border border-[#0B353B]/10 bg-white px-4 py-3.5 text-base text-[#0B353B] outline-none transition focus:border-[#0B353B]/30 focus:ring-4 focus:ring-[#ABFFAE]/30"
                   placeholder="you@example.com"
                   required
                 />
@@ -149,7 +149,7 @@ export default function LoginPage() {
                     type={showPassword ? 'text' : 'password'}
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
-                    className="w-full rounded-2xl border border-[#0B353B]/10 bg-white px-4 py-3.5 pr-12 text-base text-[#0B353B] outline-none transition focus:border-[#0B353B]/30 focus:ring-4 focus:ring-[#ABFFAE]/30"
+                    className="w-full rounded-none border border-[#0B353B]/10 bg-white px-4 py-3.5 pr-12 text-base text-[#0B353B] outline-none transition focus:border-[#0B353B]/30 focus:ring-4 focus:ring-[#ABFFAE]/30"
                     placeholder="Enter your password"
                     required
                   />
@@ -166,7 +166,7 @@ export default function LoginPage() {
 
               <div className="flex items-center justify-between gap-3 text-sm text-[#4A5C5F]">
                 <label className="flex items-center gap-2">
-                  <input type="checkbox" className="h-4 w-4 rounded border-[#0B353B]/20 text-[#0B353B]" />
+                  <input type="checkbox" className="h-4 w-4 rounded-none border-[#0B353B]/20 text-[#0B353B]" />
                   Remember me
                 </label>
                 <span>Need an account? <Link href="/signup" className="font-semibold text-[#0B353B] underline-offset-2 hover:underline">Sign up</Link></span>
@@ -184,7 +184,7 @@ export default function LoginPage() {
               <span className="h-px flex-1 bg-[#0B353B]/10" />
             </div>
 
-            <button type="button" onClick={handleGoogleSignIn} disabled={isGoogleSubmitting} className="mt-6 w-full rounded-2xl border border-[#0B353B]/10 bg-white px-4 py-3 text-sm font-medium text-[#0B353B] transition hover:border-[#0B353B]/20 hover:bg-[#FAFAF9] disabled:cursor-not-allowed disabled:opacity-70">
+            <button type="button" onClick={handleGoogleSignIn} disabled={isGoogleSubmitting} className="mt-6 w-full rounded-none border border-[#0B353B]/10 bg-white px-4 py-3 text-sm font-medium text-[#0B353B] transition hover:border-[#0B353B]/20 hover:bg-[#FAFAF9] disabled:cursor-not-allowed disabled:opacity-70">
               {isGoogleSubmitting ? 'Connecting...' : 'Continue with Google'}
             </button>
           </div>

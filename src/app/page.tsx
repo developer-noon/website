@@ -49,7 +49,7 @@ export default function Home() {
           <ImageCard image="/images/Frame 22.svg" className="p-6 sm:p-8">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold uppercase tracking-[0.18em] text-black/65">Performance</span>
-              <span className="rounded-full bg-black px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white">Live</span>
+              <span className="rounded-none bg-black px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white">Live</span>
             </div>
             <h2 className="mt-8 text-3xl font-semibold tracking-[-0.06em] text-black">Clarity that compounds.</h2>
             <p className="mt-3 max-w-sm text-sm leading-6 text-black/70">A connected digital system gives your team a clearer path from first click to finished work.</p>
@@ -58,16 +58,16 @@ export default function Home() {
                 <p className="text-4xl font-semibold tracking-[-0.08em] text-black">+40%</p>
                 <p className="mt-2 text-sm text-black/65">Increase in digital clarity and lead flow through cleaner systems.</p>
               </div>
-              <div className="h-2 rounded-full bg-black/10">
-                <div className="h-full w-[72%] rounded-full bg-black" />
+              <div className="h-2 rounded-none bg-black/10">
+                <div className="h-full w-[72%] rounded-none bg-black" />
               </div>
             </div>
             <div className="mt-8 grid grid-cols-2 gap-4 text-sm text-black/70">
-              <div className="rounded-2xl border border-black/10 bg-white/35 p-4">
+              <div className="rounded-none border border-black/10 bg-white/35 p-4">
                 <div className="text-xl font-semibold text-black">UX</div>
                 <div className="mt-2">Conversion-first design</div>
               </div>
-              <div className="rounded-2xl border border-black/10 bg-white/35 p-4">
+              <div className="rounded-none border border-black/10 bg-white/35 p-4">
                 <div className="text-xl font-semibold text-black">Ops</div>
                 <div className="mt-2">Automation setup</div>
               </div>
@@ -99,7 +99,7 @@ export default function Home() {
 
             return (
             <ImageCard key={capability.title} image={capability.image} className="p-6">
-              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#ABFFAE] text-[#0B353B]">
+              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-none bg-[#ABFFAE] text-[#0B353B]">
                 <CapabilityIcon className="h-6 w-6" aria-hidden="true" />
               </div>
               <h3 className="text-xl font-semibold tracking-[-0.04em] text-black">{capability.title}</h3>
@@ -111,7 +111,7 @@ export default function Home() {
       </section>
 
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="rounded-[32px] bg-[#0B353B] p-8 text-white sm:p-12 lg:p-16">
+        <div className="rounded-none bg-[#0B353B] p-8 text-white sm:p-12 lg:p-16">
           <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-center">
             <div>
               <span className="eyebrow eyebrow-on-dark">How I work</span>
@@ -137,7 +137,7 @@ export default function Home() {
 
         <div className="brand-card p-8 sm:p-10">
           <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
-            <div className="rounded-[24px] bg-[#FAFAF9] p-6">
+            <div className="rounded-none bg-[#FAFAF9] p-6">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#4A5C5F]">Background</p>
               <p className="mt-5 text-2xl font-semibold tracking-[-0.05em] text-[#0B353B]">BS in Computer Science</p>
             </div>
@@ -172,12 +172,12 @@ export default function Home() {
       </section>
 
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8" aria-labelledby="home-stack-heading">
-        <div className="rounded-[32px] bg-[#E8F4E4] p-8 sm:p-12">
+        <div className="rounded-none bg-[#E8F4E4] p-8 sm:p-12">
           <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
             <div className="max-w-2xl"><span className="eyebrow">A connected stack</span><h2 id="home-stack-heading" className="mt-4 text-3xl font-semibold tracking-[-0.06em] text-[#0B353B] sm:text-4xl">Design, code, content, and operations working as one.</h2></div>
             <p className="max-w-sm text-sm leading-7 text-[#4A5C5F]">The strongest outcomes come from treating the customer journey and the internal workflow as one connected system.</p>
           </div>
-          <div className="mt-10 flex flex-wrap gap-3 text-sm font-semibold text-[#0B353B]"><span className="rounded-full bg-white px-4 py-2">Strategy</span><span className="rounded-full bg-white px-4 py-2">Interface</span><span className="rounded-full bg-white px-4 py-2">Development</span><span className="rounded-full bg-white px-4 py-2">Automation</span><span className="rounded-full bg-white px-4 py-2">Optimization</span></div>
+          <div className="mt-10 flex flex-wrap gap-3 text-sm font-semibold text-[#0B353B]"><span className="rounded-none bg-white px-4 py-2">Strategy</span><span className="rounded-none bg-white px-4 py-2">Interface</span><span className="rounded-none bg-white px-4 py-2">Development</span><span className="rounded-none bg-white px-4 py-2">Automation</span><span className="rounded-none bg-white px-4 py-2">Optimization</span></div>
         </div>
       </section>
 
@@ -187,11 +187,11 @@ export default function Home() {
       </section>
 
       <section className="mx-auto max-w-5xl px-4 py-16 text-center sm:px-6 lg:px-8" aria-labelledby="home-start-heading">
-        <div className="rounded-[32px] border border-[#0B353B]/10 bg-white/70 p-8 sm:p-12"><span className="eyebrow">Start with the question</span><h2 id="home-start-heading" className="mx-auto mt-5 max-w-2xl text-3xl font-semibold tracking-[-0.06em] text-[#0B353B] sm:text-5xl">What would feel noticeably better three months from now?</h2><p className="mx-auto mt-4 max-w-xl text-base leading-7 text-[#4A5C5F]">That answer is usually enough to find the right first move.</p><Link href="/contact" className="cta-primary mt-8">Map the first move <ArrowRightIcon className="h-4 w-4" aria-hidden="true" /></Link></div>
+        <div className="rounded-none border border-[#0B353B]/10 bg-white/70 p-8 sm:p-12"><span className="eyebrow">Start with the question</span><h2 id="home-start-heading" className="mx-auto mt-5 max-w-2xl text-3xl font-semibold tracking-[-0.06em] text-[#0B353B] sm:text-5xl">What would feel noticeably better three months from now?</h2><p className="mx-auto mt-4 max-w-xl text-base leading-7 text-[#4A5C5F]">That answer is usually enough to find the right first move.</p><Link href="/contact" className="cta-primary mt-8">Map the first move <ArrowRightIcon className="h-4 w-4" aria-hidden="true" /></Link></div>
       </section>
 
       <section className="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="rounded-[32px] bg-[#ABFFAE] p-8 text-center text-[#0B353B] sm:p-12">
+        <div className="rounded-none bg-[#ABFFAE] p-8 text-center text-[#0B353B] sm:p-12">
           <h2 className="text-3xl font-semibold tracking-[-0.05em] sm:text-5xl">Let’s build something that works beautifully.</h2>
           <p className="mx-auto mt-4 max-w-2xl text-base text-[#0B353B]/80 sm:text-lg">
             Whether you need a website, a landing page, or a more efficient digital workflow, I can help you turn the idea into a polished system.
