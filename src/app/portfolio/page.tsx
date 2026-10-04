@@ -44,7 +44,7 @@ export default function Portfolio() {
 
       <section className="mt-10 flex flex-wrap items-center gap-2" aria-label="Filter portfolio projects">
         {categories.map((category) => (
-          <button key={category} type="button" onClick={() => setActiveCategory(category)} className={`rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] transition ${activeCategory === category ? 'border-[#0B353B] bg-[#0B353B] text-white' : 'border-[#0B353B]/15 bg-white/60 text-[#4A5C5F] hover:border-[#0B353B]/40 hover:text-[#0B353B]'}`}>
+          <button key={category} type="button" onClick={() => setActiveCategory(category)} className={`rounded-none border px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] transition ${activeCategory === category ? 'border-[#0B353B] bg-[#0B353B] text-white' : 'border-[#0B353B]/15 bg-white/60 text-[#4A5C5F] hover:border-[#0B353B]/40 hover:text-[#0B353B]'}`}>
             {category}
           </button>
         ))}
@@ -57,7 +57,7 @@ export default function Portfolio() {
 
           return (
           <ImageCard as="article" key={project.title} image={`/images/Frame ${18 + index}.svg`} className="flex h-full flex-col p-6">
-            <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-2xl bg-[#ABFFAE] text-[#0B353B]">
+            <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-none bg-[#ABFFAE] text-[#0B353B]">
               <ProjectIcon className="h-5 w-5" aria-hidden="true" />
             </div>
             <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-black">{project.category}</span>
@@ -65,7 +65,7 @@ export default function Portfolio() {
             <p className="mt-4 text-sm leading-7 text-black/70">{project.description}</p>
             <div className="mt-6 flex flex-wrap gap-2 pt-5">
               {project.tech.map((tech) => (
-                <span key={tech} className="rounded-full bg-white/55 px-2.5 py-1 text-[11px] font-medium text-black">
+                <span key={tech} className="rounded-none bg-white/55 px-2.5 py-1 text-[11px] font-medium text-black">
                   {tech}
                 </span>
               ))}
@@ -80,7 +80,7 @@ export default function Portfolio() {
       </section>
 
       <section className="mt-20 grid gap-6 lg:grid-cols-[0.85fr_1.15fr]" aria-labelledby="portfolio-approach-heading">
-        <div className="rounded-[28px] bg-[#0B353B] p-8 text-white sm:p-10">
+        <div className="rounded-none bg-[#0B353B] p-8 text-white sm:p-10">
           <span className="eyebrow eyebrow-on-dark">Behind the work</span>
           <h2 id="portfolio-approach-heading" className="mt-6 text-3xl font-semibold tracking-[-0.06em] sm:text-4xl">The best projects connect the visible and invisible.</h2>
           <p className="mt-5 text-sm leading-7 text-white/70">A polished interface matters, but so does what happens after the click. The work here is shaped around both sides of that experience.</p>
@@ -108,11 +108,11 @@ export default function Portfolio() {
 
       <section className="mt-20" aria-labelledby="portfolio-results-heading"><div className="max-w-2xl"><span className="eyebrow">What the work is for</span><h2 id="portfolio-results-heading" className="mt-4 text-3xl font-semibold tracking-[-0.06em] text-[#0B353B] sm:text-5xl">Every project starts with a desired change.</h2></div><div className="mt-8 grid gap-4 md:grid-cols-3">{[['Be understood','Make the offer, product, or story easier to grasp.'],['Be chosen','Create trust and momentum at the moment it matters.'],['Keep moving','Give the team a structure that supports the next action.']].map(([title,detail])=><div key={title} className="brand-card p-6"><h3 className="text-xl font-semibold text-[#0B353B]">{title}</h3><p className="mt-3 text-sm leading-6 text-[#4A5C5F]">{detail}</p></div>)}</div></section>
 
-      <section className="mt-20 rounded-[32px] bg-[#E8F4E4] p-8 sm:p-12" aria-labelledby="portfolio-detail-heading"><div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-end"><h2 id="portfolio-detail-heading" className="text-3xl font-semibold tracking-[-0.06em] text-[#0B353B] sm:text-4xl">Small details, considered together.</h2><p className="text-base leading-7 text-[#4A5C5F]">From the first line of copy to the final form state, the goal is a cohesive experience that feels deliberate instead of assembled.</p></div></section>
+      <section className="mt-20 rounded-none bg-[#E8F4E4] p-8 sm:p-12" aria-labelledby="portfolio-detail-heading"><div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-end"><h2 id="portfolio-detail-heading" className="text-3xl font-semibold tracking-[-0.06em] text-[#0B353B] sm:text-4xl">Small details, considered together.</h2><p className="text-base leading-7 text-[#4A5C5F]">From the first line of copy to the final form state, the goal is a cohesive experience that feels deliberate instead of assembled.</p></div></section>
 
       <section className="mt-20" aria-labelledby="portfolio-collab-heading"><div className="brand-card p-8 sm:p-10"><span className="eyebrow">How we collaborate</span><div className="mt-6 grid gap-4 sm:grid-cols-3"><div><h3 className="font-semibold text-[#0B353B]">Share</h3><p className="mt-2 text-sm leading-6 text-[#4A5C5F]">Context, constraints, and the outcome you want.</p></div><div><h3 className="font-semibold text-[#0B353B]">Shape</h3><p className="mt-2 text-sm leading-6 text-[#4A5C5F]">A clear direction with visible priorities.</p></div><div><h3 className="font-semibold text-[#0B353B]">Ship</h3><p className="mt-2 text-sm leading-6 text-[#4A5C5F]">A useful release and a sensible next step.</p></div></div></div></section>
 
-      <section className="mt-20 rounded-[32px] bg-[#0B353B] p-8 text-white sm:p-12" aria-labelledby="portfolio-open-heading"><span className="eyebrow eyebrow-on-dark">Open brief</span><h2 id="portfolio-open-heading" className="mt-5 max-w-3xl text-3xl font-semibold tracking-[-0.06em] sm:text-5xl">The next case study could start with your unfinished idea.</h2><Link href="/contact" className="cta-primary mt-8 bg-[#B9FF8F] text-[#0B353B] shadow-none hover:bg-[#9deb72]">Start the brief <ArrowUpRightIcon className="h-4 w-4" aria-hidden="true" /></Link></section>
+      <section className="mt-20 rounded-none bg-[#0B353B] p-8 text-white sm:p-12" aria-labelledby="portfolio-open-heading"><span className="eyebrow eyebrow-on-dark">Open brief</span><h2 id="portfolio-open-heading" className="mt-5 max-w-3xl text-3xl font-semibold tracking-[-0.06em] sm:text-5xl">The next case study could start with your unfinished idea.</h2><Link href="/contact" className="cta-primary mt-8 bg-[#B9FF8F] text-[#0B353B] shadow-none hover:bg-[#9deb72]">Start the brief <ArrowUpRightIcon className="h-4 w-4" aria-hidden="true" /></Link></section>
     </div>
   );
 }

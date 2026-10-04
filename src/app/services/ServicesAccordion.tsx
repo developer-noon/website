@@ -69,14 +69,14 @@ export default function ServicesAccordion() {
               >
                 <span className="font-mono text-sm tracking-[-0.04em] text-[#6B7778] sm:text-base">{'//'}{String(index + 1).padStart(2, '0')}</span>
                 <span className="text-2xl font-semibold tracking-[-0.06em] text-[#0B353B] transition-colors group-hover:text-[#3C853C] sm:text-4xl">{service.title}</span>
-                <span className="flex h-12 w-12 items-center justify-center rounded-full bg-[#173D29] text-[#ABFFAE] sm:h-14 sm:w-14">
+                <span className="flex h-12 w-12 items-center justify-center rounded-none bg-[#173D29] text-[#ABFFAE] sm:h-14 sm:w-14">
                   {isOpen ? <MinusIcon className="h-5 w-5" aria-hidden="true" /> : <PlusIcon className="h-5 w-5" aria-hidden="true" />}
                 </span>
               </button>
 
               {isOpen ? (
                 <div id={`service-panel-${index}`} className="grid gap-8 pb-9 pl-0 sm:grid-cols-[240px_minmax(0,1fr)] sm:gap-10 sm:pl-[88px] lg:grid-cols-[300px_minmax(0,1fr)]">
-                  <div className="relative h-48 overflow-hidden rounded-2xl sm:h-52">
+                  <div className="relative h-48 overflow-hidden rounded-none sm:h-52">
                     <Image src={service.image} alt="" fill sizes="(min-width: 1024px) 300px, 100vw" className="object-cover" />
                   </div>
                   <div className="max-w-3xl">
@@ -84,7 +84,7 @@ export default function ServicesAccordion() {
                     <ul className="mt-6 grid gap-x-8 gap-y-3 sm:grid-cols-2">
                       {service.points.map((point) => (
                         <li key={point} className="flex items-center gap-3 text-sm font-semibold capitalize text-[#0B353B] sm:text-base">
-                          <span className="h-2 w-2 shrink-0 rounded-full bg-[#73DF42]" aria-hidden="true" />
+                          <span className="h-2 w-2 shrink-0 rounded-none bg-[#73DF42]" aria-hidden="true" />
                           {point}
                         </li>
                       ))}
