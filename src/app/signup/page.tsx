@@ -234,17 +234,17 @@ export default function SignupPage() {
               <h1 className="mt-6 text-4xl font-semibold tracking-[-0.07em] text-white sm:text-5xl">
                 Create a workspace that feels organized from day one.
               </h1>
-              <p className="mt-5 text-base text-white/75">
+              <p className="auth-promo-copy mt-5 text-base text-black">
                 Launch faster with a cleaner system for client onboarding, campaign setup, and digital operations that scale with your business.
               </p>
             </div>
 
             <div className="mt-12 rounded-none border border-white/10 bg-white/5 p-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/60">Why teams choose this</p>
+              <p className="auth-promo-copy text-xs font-semibold uppercase tracking-[0.18em] text-black">Why teams choose this</p>
               <div className="mt-6 space-y-5">
                 <div>
-                  <div className="text-3xl font-semibold tracking-[-0.06em] text-white">+40%</div>
-                  <p className="mt-2 text-sm text-white/75">More visibility into conversion and client workflows.</p>
+                  <div className="auth-promo-copy text-3xl font-semibold tracking-[-0.06em] text-black">+40%</div>
+                  <p className="auth-promo-copy mt-2 text-sm text-black">More visibility into conversion and client workflows.</p>
                 </div>
                 <div className="h-2 rounded-none bg-white/10">
                   <div className="h-full w-[72%] rounded-none bg-[#ABFFAE]" />
