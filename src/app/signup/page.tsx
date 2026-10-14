@@ -231,7 +231,7 @@ export default function SignupPage() {
 
             <div className="mt-14 max-w-md">
               <span className="eyebrow eyebrow-on-dark">Build smarter</span>
-              <h1 className="mt-6 text-4xl font-semibold tracking-[-0.07em] text-white sm:text-5xl">
+              <h1 className="mt-6 text-4xl font-semibold tracking-[-0.07em] text-[#000000] sm:text-5xl">
                 Create a workspace that feels organized from day one.
               </h1>
               <p className="auth-promo-copy mt-5 text-base text-black">

@@ -19,11 +19,6 @@ type AuthUser = {
   company?: string;
 };
 
-function getAvatarUrl(name: string | null | undefined, email: string | null | undefined) {
-  const seed = name?.trim() || email?.trim() || 'User';
-  return `/api/avatar?name=${encodeURIComponent(seed)}`;
-}
-
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: MongoDBAdapter(clientPromise),
   session: {
@@ -37,7 +32,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Google({
       clientId: googleClientId,
       clientSecret: googleClientSecret,
-      allowDangerousEmailAccountLinking: true,
     }),
     Credentials({
       name: 'Credentials',
@@ -68,7 +62,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           id: user.id,
           name: user.name,
           email: user.email,
-          image: user.picture ?? getAvatarUrl(user.name, user.email),
           role: user.role ?? 'user',
           phone: user.phone ?? '',
           company: user.company ?? '',
@@ -77,27 +70,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    async signIn({ account, profile, user }) {
+    async signIn({ account, profile }) {
       if (account?.provider !== 'google') {
         return true;
       }
 
-      if (profile?.email_verified !== true || typeof profile.email !== 'string') {
-        return false;
-      }
-
-      if (user.email) {
-        const databaseUser = await findUserByEmail(user.email);
-        if (databaseUser?.password && !databaseUser.googleId) {
-          const database = await getMongoDatabase();
-          await database.collection('users').updateOne(
-            { _id: databaseUser._id },
-            { $set: { googleId: account.providerAccountId, provider: 'google' } },
-          );
-        }
-      }
-
-      return true;
+      return profile?.email_verified === true && typeof profile.email === 'string';
     },
     async jwt({ token, user }) {
       if (user) {
@@ -105,7 +83,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.id = authUser.id;
         token.name = authUser.name;
         token.email = authUser.email;
-        token.picture = authUser.image ?? getAvatarUrl(authUser.name, authUser.email);
+        token.picture = authUser.image;
         token.role = authUser.role ?? 'user';
         token.company = authUser.company ?? '';
         token.phone = authUser.phone ?? '';
@@ -129,11 +107,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       };
 
       if (sessionUser) {
-        sessionUser.id = (token.id as string | undefined) ?? '';
+        sessionUser.id = token.id as string;
         sessionUser.image = token.picture as string | null;
-        sessionUser.role = (token.role as string | undefined) ?? 'user';
-        sessionUser.company = (token.company as string | undefined) ?? '';
-        sessionUser.phone = (token.phone as string | undefined) ?? '';
+        sessionUser.role = token.role as string;
+        sessionUser.company = token.company as string;
+        sessionUser.phone = token.phone as string;
       }
 
       return session;

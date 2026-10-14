@@ -33,6 +33,9 @@ export async function findUserByEmail(email: string): Promise<(UserRecord & { id
 }
 
 export async function findUserById(id: string): Promise<(UserRecord & { id: string }) | null> {
+  if (!ObjectId.isValid(id)) {
+    return null;
+  }
   const db = await getMongoDatabase();
   const user = await db.collection<UserRecord>('users').findOne({ _id: new ObjectId(id) });
 

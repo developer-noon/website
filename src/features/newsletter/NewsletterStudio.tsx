@@ -35,13 +35,21 @@ export default function NewsletterStudio() {
   const activeTab: Tab = queryTab && ['theme', 'sessions', 'submissions', 'newsletter'].includes(queryTab) ? queryTab as Tab : tab;
 
   useEffect(() => {
-    void fetch('/api/newsletter/curate').then(async (response) => {
-      if (!response.ok) return;
-      const payload = await response.json() as { brief?: NewsletterBrief | null; sessions: NewsletterSession[] };
-      if (payload.brief) setBrief(payload.brief);
-      setSessions(payload.sessions);
-      if (payload.sessions[0]) setSelectedSessionId((current) => current || payload.sessions[0].id);
-    });
+    let mounted = true;
+    void fetch('/api/newsletter/curate')
+      .then(async (response) => {
+        const payload = await response.json() as { brief?: NewsletterBrief | null; sessions?: NewsletterSession[]; error?: string };
+        if (!response.ok) throw new Error(payload.error || 'Could not load newsletter data.');
+        if (!mounted) return;
+        const nextSessions = payload.sessions ?? [];
+        if (payload.brief) setBrief(payload.brief);
+        setSessions(nextSessions);
+        if (nextSessions[0]) setSelectedSessionId((current) => current || nextSessions[0].id);
+      })
+      .catch((error: unknown) => {
+        if (mounted) setNotice(error instanceof Error ? error.message : 'Could not load newsletter data.');
+      });
+    return () => { mounted = false; };
   }, []);
 
   const updateBrief = (field: keyof NewsletterBrief, value: string) => setBrief((current) => ({ ...current, [field]: value }));

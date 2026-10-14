@@ -13,12 +13,33 @@ function sourceFromUrl(url: string) {
   }
 }
 
+function isBlockedHostname(hostname: string) {
+  const host = hostname.toLowerCase().replace(/\.$/, '');
+  if (host === 'localhost' || host === 'ip6-localhost' || host === 'metadata.google.internal' || host === '169.254.169.254') return true;
+  if (host === '::1' || host.startsWith('fc') || host.startsWith('fd') || host.startsWith('fe80:')) return true;
+  const octets = host.split('.').map(Number);
+  if (octets.length !== 4 || octets.some((octet) => !Number.isInteger(octet) || octet < 0 || octet > 255)) return false;
+  return octets[0] === 10
+    || octets[0] === 127
+    || (octets[0] === 169 && octets[1] === 254)
+    || (octets[0] === 172 && octets[1] >= 16 && octets[1] <= 31)
+    || (octets[0] === 192 && octets[1] === 168);
+}
+
+function assertSafeExternalUrl(value: string) {
+  const parsed = new URL(value);
+  if (!['http:', 'https:'].includes(parsed.protocol) || isBlockedHostname(parsed.hostname)) {
+    throw new Error('Only public http(s) URLs are allowed.');
+  }
+  return parsed.toString();
+}
+
 function stripHtml(value: string) {
   return value.replace(/<!\[CDATA\[|\]\]>/g, '').replace(/<[^>]+>/g, ' ').replace(/&amp;/g, '&').replace(/&#39;/g, "'").replace(/&quot;/g, '"').replace(/\s+/g, ' ').trim();
 }
 
 export function resourceFromUrl(input: { title?: string; url: string; description?: string; addedBy?: 'ai' | 'manual' }): NewsletterResource {
-  const url = new URL(input.url).toString();
+  const url = assertSafeExternalUrl(input.url);
   return {
     id: randomUUID(),
     title: clean(input.title, sourceFromUrl(url)),
@@ -30,7 +51,8 @@ export function resourceFromUrl(input: { title?: string; url: string; descriptio
 }
 
 export async function describeResource(url: string, title?: string) {
-  const response = await fetch(url, { headers: { 'User-Agent': 'NewsletterStudio/1.0 resource preview' }, signal: AbortSignal.timeout(8000) });
+  const safeUrl = assertSafeExternalUrl(url);
+  const response = await fetch(safeUrl, { redirect: 'error', headers: { 'User-Agent': 'NewsletterStudio/1.0 resource preview' }, signal: AbortSignal.timeout(8000) });
   if (!response.ok) throw new Error(`Could not read that link (${response.status}).`);
   const html = await response.text();
   const description = html.match(/<meta[^>]+(?:name|property)=["'](?:description|og:description)["'][^>]+content=["']([^"']*)["']/i)?.[1]

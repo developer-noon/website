@@ -3,7 +3,7 @@ import { createUser } from '@/lib/users';
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    const body = await request.json() as Record<string, unknown>;
     const { name, email, password, confirmPassword, phone, company } = body;
 
     if (typeof name !== 'string' || typeof email !== 'string' || typeof password !== 'string' || typeof confirmPassword !== 'string') {
@@ -14,8 +14,20 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Name and email are required.' }, { status: 400 });
     }
 
+    if (name.trim().length > 100 || email.trim().length > 254) {
+      return NextResponse.json({ error: 'Name or email is too long.' }, { status: 400 });
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      return NextResponse.json({ error: 'Enter a valid email address.' }, { status: 400 });
+    }
+
     if (password.length < 8) {
       return NextResponse.json({ error: 'Password must be at least 8 characters long.' }, { status: 400 });
+    }
+
+    if (password.length > 128) {
+      return NextResponse.json({ error: 'Password must be 128 characters or fewer.' }, { status: 400 });
     }
 
     if (password !== confirmPassword) {
@@ -26,8 +38,8 @@ export async function POST(request: Request) {
       name,
       email,
       password,
-      phone,
-      company,
+      phone: typeof phone === 'string' ? phone.slice(0, 40) : '',
+      company: typeof company === 'string' ? company.slice(0, 120) : '',
     });
 
     return NextResponse.json(

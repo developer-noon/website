@@ -70,17 +70,17 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(171,255,174,0.22),_transparent_32%),linear-gradient(135deg,#f7f9f9_0%,#ffffff_100%)] px-4 py-10 sm:px-6 lg:px-8">
       <div className="mx-auto grid max-w-6xl overflow-hidden rounded-none border border-[#0B353B]/10 bg-white shadow-[0_25px_80px_rgba(11,53,59,0.08)] lg:grid-cols-[1.02fr_0.98fr]">
-        <section className="auth-promo-panel relative overflow-hidden bg-[#0B353B] px-6 py-10 text-white sm:px-10 sm:py-14">
+        <section className="auth-promo-panel relative overflow-hidden bg-[#0B353B] px-6 py-10 text-black sm:px-10 sm:py-14">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(171,255,174,0.18),_transparent_35%)]" />
 
           <div className="relative z-10">
-            <Link href="/" className="inline-flex items-center text-[1.35rem] font-extrabold tracking-[-0.06em] text-white">
+            <Link href="/" className="inline-flex items-center text-[1.35rem] font-extrabold tracking-[-0.06em] text-black">
               Hammad<span className="text-[#ABFFAE]">.</span>
             </Link>
 
             <div className="mt-14 max-w-md">
               <span className="eyebrow eyebrow-on-dark">Welcome back</span>
-              <h1 className="mt-6 text-4xl font-semibold tracking-[-0.07em] text-white sm:text-5xl">
+              <h1 className="mt-6 text-4xl font-semibold tracking-[-0.07em] text-black sm:text-5xl">
                 Access your workspace and move faster.
               </h1>
               <p className="auth-promo-copy mt-5 text-base text-black">
