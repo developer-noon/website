@@ -12,7 +12,7 @@ type BrandDocument = { _id: ObjectId; userId: string; brief: NewsletterBrief; up
 
 function getUserId(session: Session | null) {
   const user = session?.user as (Session['user'] & { id?: string }) | undefined;
-  return user?.id || user?.email || '';
+  return user?.id || '';
 }
 
 function serializeSession(document: SessionDocument): NewsletterSession {

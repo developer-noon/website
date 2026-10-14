@@ -58,6 +58,7 @@ function parseTime(value: string): string {
   if (!match) throw new Error(`Invalid time in CSV: ${value}`);
   let hour = Number(match[1]);
   const minute = Number(match[2]);
+  if (minute > 59 || hour < 0 || hour > 23 || (match[3] && hour > 12)) throw new Error(`Invalid time in CSV: ${value}`);
   const meridiem = match[3]?.toLowerCase();
   if (meridiem === 'pm' && hour !== 12) hour += 12;
   if (meridiem === 'am' && hour === 12) hour = 0;
@@ -67,6 +68,7 @@ function parseTime(value: string): string {
 function parseDuration(value: string): string {
   const match = value.trim().match(/^(\d+):(\d{2})(?::(\d{2}))?$/);
   if (!match) throw new Error(`Invalid duration in CSV: ${value}`);
+  if (Number(match[2]) > 59 || (match[3] && Number(match[3]) > 59)) throw new Error(`Invalid duration in CSV: ${value}`);
   return `${String(Number(match[1])).padStart(2, '0')}:${match[2]}:${match[3] ?? '00'}`;
 }
 
@@ -104,8 +106,11 @@ export async function POST(request: Request) {
     const existing = await collection.findOne({ userId });
     const store: OfficeHoursStore = sanitizeOfficeHoursStore(existing?.store ?? {
       clients: [],
+      projects: [],
+      team: [],
       entries: [],
       cycles: [],
+      reports: [],
       basePay: 50000,
       exchangeRate: 275,
       officeStart: '14:00',
@@ -138,9 +143,12 @@ export async function POST(request: Request) {
         arrival: currentArrival,
         leaving: currentLeaving,
         clientId: client.id,
+        projectId: store.projects.find((project) => project.clientId === client.id)?.id ?? `project-${client.id}-general`,
+        memberId: store.team[0]?.id ?? 'team-you',
         task: row[taskIndex]?.trim() ?? '',
         hours: parseDuration(row[hoursIndex]?.trim() ?? ''),
         cycleId: 'active',
+        billed: false,
       });
     }
 

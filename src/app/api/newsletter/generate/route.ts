@@ -17,7 +17,10 @@ export async function POST(request: Request) {
   try {
     const input = await request.json() as Partial<NewsletterBrief> & { refreshSeed?: string; resources?: NewsletterResource[]; sessionId?: string };
     const user = session.user as typeof session.user & { id?: string };
-    const userId = user.id || user.email || '';
+    const userId = user.id || '';
+    if (!userId) {
+      return NextResponse.json({ error: 'Authentication identity is unavailable.' }, { status: 401 });
+    }
     const database = await getMongoDatabase();
     const savedBrand = await database.collection<BrandDocument>('newsletter_brand_profiles').findOne({ userId });
     const savedSession = input.sessionId && ObjectId.isValid(input.sessionId)
