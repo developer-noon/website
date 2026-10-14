@@ -8,7 +8,7 @@ type SavedReport = {
   id: string;
   client: string;
   email: string;
-  reportDate: string;
+  reportDate?: string;
   createdAt: string;
   totalHours: string;
 };
@@ -17,7 +17,7 @@ const today = () => new Date().toISOString().slice(0, 10);
 const displayDate = (value: string) => {
   if (!value) return '';
   const [year, month, day] = value.split('-');
-  return `${day}.${month}.${year}`;
+  return year && month && day ? `${day}.${month}.${year}` : value;
 };
 
 export default function HoursReportPage() {
@@ -217,7 +217,7 @@ export default function HoursReportPage() {
       {tab === 'history' ? <div className="mt-6 brand-card border-t-0 bg-white p-6 shadow-sm sm:p-8">
         <div className="flex flex-wrap items-end justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#64748b]">Saved reports</p><h2 className="mt-2 text-2xl font-semibold text-[#111827]">Report history</h2></div><button type="button" onClick={() => void loadHistory()} className="text-sm font-semibold text-[#2563eb]">Refresh</button></div>
         {error ? <p className="mt-6 text-sm text-red-700" role="alert">{error}</p> : null}
-        {!error && (historyLoading ? <p className="mt-6 text-sm text-[#64748b]">Loading report history…</p> : history.length ? <div className="mt-6 overflow-x-auto"><table className="w-full min-w-[760px] text-left text-sm"><thead className="bg-[#2b2b2b] text-xs text-white"><tr><th className="px-4 py-3">Client</th><th className="px-4 py-3">Report date</th><th className="px-4 py-3">Created</th><th className="px-4 py-3">Hours</th><th className="px-4 py-3">Action</th></tr></thead><tbody>{history.map((item) => <tr key={item.id} className="border-b border-[#e5e7eb]"><td className="px-4 py-4 font-semibold text-[#111827]">{item.client}</td><td className="px-4 py-4">{item.reportDate}</td><td className="px-4 py-4">{new Date(item.createdAt).toLocaleString()}</td><td className="px-4 py-4 font-semibold">{item.totalHours}</td><td className="px-4 py-4"><a href={`/api/report/${encodeURIComponent(item.id)}`} download className="font-semibold text-[#2563eb]">Download PDF</a></td></tr>)}</tbody></table></div> : <p className="mt-6 text-sm text-[#64748b]">No saved reports yet. Generate a PDF to create the first history record.</p>)}
+        {!error && (historyLoading ? <p className="mt-6 text-sm text-[#64748b]">Loading report history…</p> : history.length ? <div className="mt-6 overflow-x-auto"><table className="w-full min-w-[760px] text-left text-sm"><thead className="bg-[#2b2b2b] text-xs text-white"><tr><th className="px-4 py-3">Client</th><th className="px-4 py-3">Report date</th><th className="px-4 py-3">Created</th><th className="px-4 py-3">Hours</th><th className="px-4 py-3">Action</th></tr></thead><tbody>{history.map((item) => <tr key={item.id} className="border-b border-[#e5e7eb]"><td className="px-4 py-4 font-semibold text-[#111827]">{item.client}</td><td className="px-4 py-4">{item.reportDate || '—'}</td><td className="px-4 py-4">{new Date(item.createdAt).toLocaleString()}</td><td className="px-4 py-4 font-semibold">{item.totalHours}</td><td className="px-4 py-4"><a href={`/api/report/${encodeURIComponent(item.id)}`} download className="font-semibold text-[#2563eb]">Download PDF</a></td></tr>)}</tbody></table></div> : <p className="mt-6 text-sm text-[#64748b]">No saved reports yet. Generate a PDF to create the first history record.</p>)}
       </div> : null}
     </div>
   );

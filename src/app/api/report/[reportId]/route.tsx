@@ -6,7 +6,7 @@ import type { Entry } from '@/lib/hours-report/types';
 import { getMongoDatabase } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 
-type SavedReport = { id: string; userId: string | ObjectId; client: string; name: string; email: string; reportDate: string; entries: Entry[] };
+type SavedReport = { id: string; userId: string | ObjectId; client: string; name: string; email: string; reportDate?: string; date?: string; entries: Entry[] };
 type RouteContext = { params: Promise<{ reportId: string }> };
 
 export async function GET(_request: Request, context: RouteContext) {
@@ -25,7 +25,7 @@ export async function GET(_request: Request, context: RouteContext) {
     client: saved.client,
     name: saved.name,
     email: saved.email,
-    date: saved.reportDate,
+    date: saved.reportDate ?? saved.date ?? '',
   });
   return new NextResponse(pdf, {
     headers: {

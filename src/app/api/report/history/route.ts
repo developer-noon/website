@@ -9,7 +9,8 @@ type SavedReport = {
   client: string;
   name: string;
   email: string;
-  reportDate: string;
+  reportDate?: string;
+  date?: string;
   createdAt: Date;
   totalHours: string;
   entries: unknown[];
@@ -28,5 +29,10 @@ export async function GET() {
     .sort({ createdAt: -1 })
     .limit(100)
     .toArray();
-  return NextResponse.json({ reports });
+  return NextResponse.json({
+    reports: reports.map((report) => ({
+      ...report,
+      reportDate: report.reportDate ?? report.date ?? '',
+    })),
+  });
 }
