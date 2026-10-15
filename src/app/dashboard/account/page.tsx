@@ -11,6 +11,10 @@ export default function AccountPage() {
   const [notice, setNotice] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const [passwords, setPasswords] = useState({ current: '', next: '', confirm: '' });
+  const [passwordBusy, setPasswordBusy] = useState(false);
+  const [passwordNotice, setPasswordNotice] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
   useEffect(() => {
     void fetch('/api/account').then(async (response) => {
@@ -44,6 +48,25 @@ export default function AccountPage() {
     }
     await signOut({ callbackUrl: '/' });
   };
+  const updatePassword = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setPasswordBusy(true); setPasswordNotice(''); setPasswordError('');
+    try {
+      const response = await fetch('/api/account', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ currentPassword: passwords.current, newPassword: passwords.next, confirmPassword: passwords.confirm }),
+      });
+      const payload = await response.json() as { error?: string };
+      if (!response.ok) throw new Error(payload.error ?? 'Unable to update your password.');
+      setPasswords({ current: '', next: '', confirm: '' });
+      setPasswordNotice('Password updated. A confirmation email was sent to your account.');
+    } catch (caught) {
+      setPasswordError(caught instanceof Error ? caught.message : 'Unable to update your password.');
+    } finally {
+      setPasswordBusy(false);
+    }
+  };
 
   return <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
     <div className="mb-8"><p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#64748b]">Account</p><h1 className="mt-3 text-4xl font-bold tracking-tight text-[#111827]">Profile and account</h1><p className="mt-3 text-[#64748b]">Update your profile details or permanently remove your account and workspace data.</p></div>
@@ -57,12 +80,23 @@ export default function AccountPage() {
         <div className="flex items-center justify-between border-t border-[#e6ebf2] pt-5"><span className="text-sm text-[#64748b]">Role: <strong className="text-[#111827]">{account.role}</strong></span><button type="submit" disabled={busy} className="bg-[#2563eb] px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-60">{busy ? 'Saving…' : 'Save changes'}</button></div>
       </form>
     </Card>
+    <Card className="mt-6">
+      <form onSubmit={updatePassword} className="space-y-5 p-6">
+        <div><h2 className="font-bold text-[#111827]">Update password</h2><p className="mt-2 text-sm text-[#64748b]">Enter your current password, then enter and confirm your new password. We will email you after the change succeeds.</p></div>
+        {passwordNotice ? <p className="border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{passwordNotice}</p> : null}
+        {passwordError ? <p className="border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{passwordError}</p> : null}
+        <Field label="Current password" type="password" value={passwords.current} onChange={(value) => setPasswords((current) => ({ ...current, current: value }))} required />
+        <Field label="New password" type="password" value={passwords.next} onChange={(value) => setPasswords((current) => ({ ...current, next: value }))} required />
+        <Field label="Re-enter new password" type="password" value={passwords.confirm} onChange={(value) => setPasswords((current) => ({ ...current, confirm: value }))} required />
+        <button type="submit" disabled={passwordBusy} className="bg-[#2563eb] px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-60">{passwordBusy ? 'Updating…' : 'Update password'}</button>
+      </form>
+    </Card>
     <Card className="mt-6 border-red-200">
       <div className="p-6"><h2 className="font-bold text-red-700">Delete account</h2><p className="mt-2 text-sm text-[#64748b]">This permanently deletes your profile, time entries, clients, newsletter data, and connected sign-in accounts.</p><button type="button" onClick={() => void deleteAccount()} disabled={busy} className="mt-5 border border-red-300 px-4 py-2.5 text-sm font-semibold text-red-700 disabled:cursor-not-allowed disabled:opacity-50">Delete account</button></div>
     </Card>
   </div>;
 }
 
-function Field({ label, value, onChange, disabled = false, required = false }: { label: string; value: string; onChange: (value: string) => void; disabled?: boolean; required?: boolean }) {
-  return <label className="block"><span className="mb-1.5 block text-xs font-semibold text-[#64748b]">{label}</span><input value={value} onChange={(event) => onChange(event.target.value)} disabled={disabled} required={required} className="w-full border border-[#dbe3ee] bg-white px-3 py-2.5 text-sm text-[#1e293b] outline-none focus:border-[#2563eb] disabled:bg-[#f8fafc] disabled:text-[#94a3b8]" /></label>;
+function Field({ label, value, onChange, disabled = false, required = false, type = 'text' }: { label: string; value: string; onChange: (value: string) => void; disabled?: boolean; required?: boolean; type?: string }) {
+  return <label className="block"><span className="mb-1.5 block text-xs font-semibold text-[#64748b]">{label}</span><input type={type} value={value} onChange={(event) => onChange(event.target.value)} disabled={disabled} required={required} className="w-full border border-[#dbe3ee] bg-white px-3 py-2.5 text-sm text-[#1e293b] outline-none focus:border-[#2563eb] disabled:bg-[#f8fafc] disabled:text-[#94a3b8]" /></label>;
 }
