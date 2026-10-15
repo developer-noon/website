@@ -3,6 +3,8 @@ import { getMongoDatabase } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 import { NextResponse } from 'next/server';
 import type { Session } from 'next-auth';
+import bcrypt from 'bcryptjs';
+import { sendEmail } from '@/lib/email';
 
 function getSessionUserId(session: Session | null) {
   const user = session?.user as { id?: string } | undefined;
@@ -42,6 +44,43 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ ok: true });
   } catch {
     return NextResponse.json({ error: 'Unable to update your profile.' }, { status: 400 });
+  }
+}
+
+export async function PUT(request: Request) {
+  const session = await auth();
+  const userId = getSessionUserId(session);
+  if (!userId) return NextResponse.json({ error: 'Authentication required.' }, { status: 401 });
+
+  try {
+    const body = await request.json() as { currentPassword?: unknown; newPassword?: unknown; confirmPassword?: unknown };
+    if (typeof body.currentPassword !== 'string' || typeof body.newPassword !== 'string' || typeof body.confirmPassword !== 'string') {
+      return NextResponse.json({ error: 'Current password, new password, and confirmation are required.' }, { status: 400 });
+    }
+    if (body.newPassword.length < 8) return NextResponse.json({ error: 'New password must be at least 8 characters long.' }, { status: 400 });
+    if (body.newPassword.length > 128) return NextResponse.json({ error: 'New password must be 128 characters or fewer.' }, { status: 400 });
+    if (body.newPassword !== body.confirmPassword) return NextResponse.json({ error: 'New passwords do not match.' }, { status: 400 });
+    if (body.currentPassword === body.newPassword) return NextResponse.json({ error: 'New password must be different from your current password.' }, { status: 400 });
+
+    const database = await getMongoDatabase();
+    const user = await database.collection<{ email?: string; password?: string; name?: string }>('users').findOne({ _id: new ObjectId(userId) });
+    if (!user?.email) return NextResponse.json({ error: 'Account not found.' }, { status: 404 });
+    if (!user.password || !await bcrypt.compare(body.currentPassword, user.password)) {
+      return NextResponse.json({ error: 'Current password is incorrect.' }, { status: 401 });
+    }
+
+    const password = await bcrypt.hash(body.newPassword, 12);
+    await database.collection('users').updateOne({ _id: new ObjectId(userId) }, { $set: { password, updatedAt: new Date() } });
+    await sendEmail({
+      to: user.email,
+      subject: 'Your OfficeHoursTrack password was updated',
+      text: `Hi ${user.name ?? 'there'}, your OfficeHoursTrack password was updated successfully. If you did not make this change, contact support immediately.`,
+      html: `<p>Hi ${user.name ?? 'there'},</p><p>Your OfficeHoursTrack password was updated successfully.</p><p><strong>If you did not make this change, contact support immediately.</strong></p>`,
+    });
+    return NextResponse.json({ ok: true });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unable to update your password.';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
