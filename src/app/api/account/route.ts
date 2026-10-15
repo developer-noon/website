@@ -52,6 +52,18 @@ export async function DELETE() {
 
   const database = await getMongoDatabase();
   const objectUserId = new ObjectId(userId);
+  const ownedWorkspaces = await database.collection('workspaces').find({ ownerId: userId }, { projection: { _id: 1 } }).toArray();
+  const workspaceIds = ownedWorkspaces.map((workspace) => workspace._id?.toString()).filter((id): id is string => Boolean(id));
+  const account = await database.collection('users').findOne({ _id: objectUserId }, { projection: { email: 1 } });
+
+  await database.collection('accountDeletionLogs').insertOne({
+    userId,
+    email: account?.email ?? '',
+    deletedAt: new Date(),
+    reason: 'User requested account deletion',
+    dataDeleted: true,
+  });
+
   await Promise.all([
     database.collection('users').deleteOne({ _id: objectUserId }),
     database.collection('accounts').deleteMany({ $or: [{ userId }, { userId: objectUserId }] }),
@@ -59,6 +71,13 @@ export async function DELETE() {
     database.collection('officeHoursTrack').deleteMany({ userId }),
     database.collection('newsletter_brand_profiles').deleteMany({ userId }),
     database.collection('newsletter_sessions').deleteMany({ userId }),
+    database.collection('hoursReports').deleteMany({ userId: { $in: [userId, objectUserId] } }),
+    database.collection('emailVerifications').deleteMany({ email: account?.email ?? '' }),
+    database.collection('workspaceMemberships').deleteMany({ userId }),
+    database.collection('workspaceInvitations').deleteMany({ $or: [{ invitedBy: userId }, { email: account?.email ?? '' }] }),
+    workspaceIds.length ? database.collection('workspaceMemberships').deleteMany({ workspaceId: { $in: workspaceIds } }) : Promise.resolve(),
+    workspaceIds.length ? database.collection('workspaceInvitations').deleteMany({ workspaceId: { $in: workspaceIds } }) : Promise.resolve(),
+    workspaceIds.length ? database.collection('workspaces').deleteMany({ _id: { $in: ownedWorkspaces.map((workspace) => workspace._id).filter((id): id is ObjectId => Boolean(id)) } }) : Promise.resolve(),
   ]);
   return NextResponse.json({ ok: true });
 }
