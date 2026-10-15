@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server';
 import { createUser } from '@/lib/users';
+import { consumeEmailVerification, normalizeEmail } from '@/lib/email-verification';
 
 export async function POST(request: Request) {
   try {
     const body = await request.json() as Record<string, unknown>;
-    const { name, email, password, confirmPassword, phone, company } = body;
+    const { name, email, password, confirmPassword, phone, company, verificationToken } = body;
 
     if (typeof name !== 'string' || typeof email !== 'string' || typeof password !== 'string' || typeof confirmPassword !== 'string') {
       return NextResponse.json({ error: 'Name, email, password, and password confirmation are required.' }, { status: 400 });
@@ -32,6 +33,10 @@ export async function POST(request: Request) {
 
     if (password !== confirmPassword) {
       return NextResponse.json({ error: 'Passwords do not match.' }, { status: 400 });
+    }
+
+    if (typeof verificationToken !== 'string' || !await consumeEmailVerification(normalizeEmail(email), verificationToken)) {
+      return NextResponse.json({ error: 'Verify your email address before creating an account.' }, { status: 403 });
     }
 
     const user = await createUser({

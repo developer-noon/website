@@ -11,6 +11,11 @@ export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSendingVerification, setIsSendingVerification] = useState(false);
+  const [isVerifyingEmail, setIsVerifyingEmail] = useState(false);
+  const [verificationSent, setVerificationSent] = useState(false);
+  const [verificationCode, setVerificationCode] = useState('');
+  const [verificationToken, setVerificationToken] = useState('');
   const [error, setError] = useState('');
   const [form, setForm] = useState({
     fullName: '',
@@ -24,10 +29,63 @@ export default function SignupPage() {
 
   const handleChange = (field: keyof typeof form, value: string) => {
     setForm((current) => ({ ...current, [field]: value }));
+    if (field === 'email') {
+      setVerificationSent(false);
+      setVerificationCode('');
+      setVerificationToken('');
+    }
+  };
+
+  const sendVerification = async () => {
+    setIsSendingVerification(true);
+    setError('');
+    try {
+      const response = await fetch('/api/auth/send-verification', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: form.email }),
+      });
+      const payload = await response.json() as { error?: string };
+      if (!response.ok) {
+        setError(payload.error ?? 'Unable to send verification email.');
+        return;
+      }
+      setVerificationSent(true);
+    } catch {
+      setError('Unable to send verification email.');
+    } finally {
+      setIsSendingVerification(false);
+    }
+  };
+
+  const verifyEmail = async () => {
+    setIsVerifyingEmail(true);
+    setError('');
+    try {
+      const response = await fetch('/api/auth/verify-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: form.email, code: verificationCode }),
+      });
+      const payload = await response.json() as { error?: string; verificationToken?: string };
+      if (!response.ok || !payload.verificationToken) {
+        setError(payload.error ?? 'Unable to verify your email.');
+        return;
+      }
+      setVerificationToken(payload.verificationToken);
+    } catch {
+      setError('Unable to verify your email.');
+    } finally {
+      setIsVerifyingEmail(false);
+    }
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!verificationToken) {
+      setError('Verify your email address before creating an account.');
+      return;
+    }
     setIsSubmitting(true);
     setError('');
 
@@ -44,6 +102,7 @@ export default function SignupPage() {
           confirmPassword: form.confirmPassword,
           phone: form.phone,
           company: form.company,
+          verificationToken,
         }),
       });
 
@@ -119,6 +178,20 @@ export default function SignupPage() {
                   placeholder="you@example.com"
                   required
                 />
+                <div className="mt-3 flex gap-2">
+                  <button type="button" onClick={() => void sendVerification()} disabled={isSendingVerification || !form.email} className="rounded-none border border-[#0B353B]/20 px-3 py-2 text-sm font-semibold text-[#0B353B] disabled:opacity-50">
+                    {isSendingVerification ? 'Sending...' : 'Send code'}
+                  </button>
+                  {verificationToken ? <span className="flex items-center text-sm font-semibold text-green-700">Email verified</span> : null}
+                </div>
+                {verificationSent && !verificationToken ? (
+                  <div className="mt-3 flex gap-2">
+                    <input aria-label="Email verification code" inputMode="numeric" pattern="\d{6}" maxLength={6} value={verificationCode} onChange={(event) => setVerificationCode(event.target.value)} className="min-w-0 flex-1 rounded-none border border-[#0B353B]/10 px-4 py-2 text-sm" placeholder="6-digit code" />
+                    <button type="button" onClick={() => void verifyEmail()} disabled={isVerifyingEmail || verificationCode.length !== 6} className="rounded-none bg-[#0B353B] px-3 py-2 text-sm font-semibold text-white disabled:opacity-50">
+                      {isVerifyingEmail ? 'Checking...' : 'Verify'}
+                    </button>
+                  </div>
+                ) : null}
               </div>
 
               <div className="grid gap-5 sm:grid-cols-2">

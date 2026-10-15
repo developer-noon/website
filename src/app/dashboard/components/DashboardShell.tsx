@@ -47,6 +47,7 @@ export default function DashboardShell({ children, user }: { children: React.Rea
           <SidebarLink href="/dashboard/newsletter?tab=sessions" icon={<EnvelopeIcon className="h-[18px] w-[18px]" aria-hidden="true" />} label="Sessions" active={isNewsletterRoute && activeTab === 'sessions'} onNavigate={() => setIsSidebarOpen(false)} />
           <SidebarLink href="/dashboard/newsletter?tab=submissions" icon={<EnvelopeIcon className="h-[18px] w-[18px]" aria-hidden="true" />} label="Submissions" active={isNewsletterRoute && activeTab === 'submissions'} onNavigate={() => setIsSidebarOpen(false)} />
           <SidebarLink href="/dashboard/newsletter?tab=newsletter" icon={<EnvelopeIcon className="h-[18px] w-[18px]" aria-hidden="true" />} label="Newsletter" active={isNewsletterRoute && activeTab === 'newsletter'} onNavigate={() => setIsSidebarOpen(false)} /></> : null}
+          {!hasSidebar ? <SidebarLink href="/dashboard/workspace" icon={<UserGroupIcon className="h-[18px] w-[18px]" aria-hidden="true" />} label="Team workspace" onNavigate={() => setIsSidebarOpen(false)} /> : null}
         </nav>
       </aside> : null}
       <header className={`sticky top-0 z-40 border-b border-[#E5E7EB] bg-white/95 backdrop-blur-xl ${hasSidebar ? 'lg:ml-[248px]' : ''}`}>

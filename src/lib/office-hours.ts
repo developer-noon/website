@@ -64,13 +64,7 @@ export function sanitizeOfficeHoursStore(store: OfficeHoursStore): OfficeHoursSt
     ...client,
     name: allowedClientName(client.name) ?? client.name,
   }));
-  const clients = ALLOWED_OFFICE_HOUR_CLIENTS.map((name) => existingClients.find((client) => client.name.toLowerCase() === name.toLowerCase()) ?? ({
-    id: `client-${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
-    name,
-    company: name,
-    rate: 2475,
-    status: 'Active' as const,
-  }));
+  const clients = existingClients;
   const clientIds = new Set(clients.map((client) => client.id));
   const projects = rawProjects.filter((project) => project && typeof project.id === 'string' && clientIds.has(project.clientId) && typeof project.name === 'string').map((project) => ({
     ...project,
@@ -89,9 +83,8 @@ export function sanitizeOfficeHoursStore(store: OfficeHoursStore): OfficeHoursSt
     email: typeof member.email === 'string' ? member.email.trim() : '',
     status: member.status === 'Archived' ? 'Archived' as const : 'Active' as const,
   }));
-  if (!team.length) team.push({ id: 'team-you', name: 'You', email: '', status: 'Active' });
   const teamIds = new Set(team.map((member) => member.id));
-  const defaultMemberId = team.find((member) => member.status === 'Active')?.id ?? team[0].id;
+  const defaultMemberId = team.find((member) => member.status === 'Active')?.id ?? '';
   const seenEntries = new Set<string>();
   return {
     ...store,

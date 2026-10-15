@@ -15,7 +15,7 @@ import {
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { Fragment, useEffect, useState } from 'react';
-import { ALLOWED_OFFICE_HOUR_CLIENTS, durationToSeconds, formatDuration, sanitizeOfficeHoursStore, type OfficeHoursProject, type OfficeHoursReport, type OfficeHoursTeamMember } from '@/lib/office-hours';
+import { durationToSeconds, formatDuration, sanitizeOfficeHoursStore, type OfficeHoursProject, type OfficeHoursReport, type OfficeHoursTeamMember } from '@/lib/office-hours';
 
 type Tab = 'clients' | 'projects' | 'team' | 'hours' | 'pay' | 'income' | 'reports' | 'analytics';
 type Client = { id: string; name: string; company: string; rate: number; status: 'Active' | 'Archived' };
@@ -43,11 +43,9 @@ type Store = { clients: Client[]; projects: Project[]; team: TeamMember[]; entri
 const today = () => new Date().toISOString().slice(0, 10);
 const uid = () => Math.random().toString(36).slice(2, 10);
 const initialStore: Store = {
-  clients: [
-    ...ALLOWED_OFFICE_HOUR_CLIENTS.map((name, index) => ({ id: `client-${index + 1}`, name, company: name, rate: 2475, status: 'Active' as const })),
-  ],
-  projects: ALLOWED_OFFICE_HOUR_CLIENTS.map((name, index) => ({ id: `project-${index + 1}-general`, clientId: `client-${index + 1}`, name: 'General', status: 'Active' as const })),
-  team: [{ id: 'team-you', name: 'You', email: '', status: 'Active' }],
+  clients: [],
+  projects: [],
+  team: [],
   entries: [],
   cycles: [],
   reports: [],
