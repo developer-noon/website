@@ -11,7 +11,7 @@ export default function AccountPage() {
   const [notice, setNotice] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
-  const [passwords, setPasswords] = useState({ current: '', next: '', confirm: '' });
+  const [currentPassword, setCurrentPassword] = useState('');
   const [passwordBusy, setPasswordBusy] = useState(false);
   const [passwordNotice, setPasswordNotice] = useState('');
   const [passwordError, setPasswordError] = useState('');
@@ -48,19 +48,19 @@ export default function AccountPage() {
     }
     await signOut({ callbackUrl: '/' });
   };
-  const updatePassword = async (event: React.FormEvent<HTMLFormElement>) => {
+  const requestPasswordUpdate = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setPasswordBusy(true); setPasswordNotice(''); setPasswordError('');
     try {
       const response = await fetch('/api/account', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ currentPassword: passwords.current, newPassword: passwords.next, confirmPassword: passwords.confirm }),
+        body: JSON.stringify({ currentPassword }),
       });
       const payload = await response.json() as { error?: string };
       if (!response.ok) throw new Error(payload.error ?? 'Unable to update your password.');
-      setPasswords({ current: '', next: '', confirm: '' });
-      setPasswordNotice('Password updated. A confirmation email was sent to your account.');
+      setCurrentPassword('');
+      setPasswordNotice('A password update link was sent to your account email. Open it to choose your new password.');
     } catch (caught) {
       setPasswordError(caught instanceof Error ? caught.message : 'Unable to update your password.');
     } finally {
@@ -81,14 +81,12 @@ export default function AccountPage() {
       </form>
     </Card>
     <Card className="mt-6">
-      <form onSubmit={updatePassword} className="space-y-5 p-6">
-        <div><h2 className="font-bold text-[#111827]">Update password</h2><p className="mt-2 text-sm text-[#64748b]">Enter your current password, then enter and confirm your new password. We will email you after the change succeeds.</p></div>
+      <form onSubmit={requestPasswordUpdate} className="space-y-5 p-6">
+        <div><h2 className="font-bold text-[#111827]">Update password</h2><p className="mt-2 text-sm text-[#64748b]">Enter your current password. We will email you a secure link where you can choose and confirm the new password.</p></div>
         {passwordNotice ? <p className="border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{passwordNotice}</p> : null}
         {passwordError ? <p className="border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{passwordError}</p> : null}
-        <Field label="Current password" type="password" value={passwords.current} onChange={(value) => setPasswords((current) => ({ ...current, current: value }))} required />
-        <Field label="New password" type="password" value={passwords.next} onChange={(value) => setPasswords((current) => ({ ...current, next: value }))} required />
-        <Field label="Re-enter new password" type="password" value={passwords.confirm} onChange={(value) => setPasswords((current) => ({ ...current, confirm: value }))} required />
-        <button type="submit" disabled={passwordBusy} className="bg-[#2563eb] px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-60">{passwordBusy ? 'Updating…' : 'Update password'}</button>
+        <Field label="Current password" type="password" value={currentPassword} onChange={setCurrentPassword} required />
+        <button type="submit" disabled={passwordBusy} className="bg-[#2563eb] px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-60">{passwordBusy ? 'Sending…' : 'Send password update link'}</button>
       </form>
     </Card>
     <Card className="mt-6 border-red-200">

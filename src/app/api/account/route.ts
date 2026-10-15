@@ -5,6 +5,7 @@ import { NextResponse } from 'next/server';
 import type { Session } from 'next-auth';
 import bcrypt from 'bcryptjs';
 import { sendEmail } from '@/lib/email';
+import { createHash, randomBytes } from 'crypto';
 
 function getSessionUserId(session: Session | null) {
   const user = session?.user as { id?: string } | undefined;
@@ -53,14 +54,10 @@ export async function PUT(request: Request) {
   if (!userId) return NextResponse.json({ error: 'Authentication required.' }, { status: 401 });
 
   try {
-    const body = await request.json() as { currentPassword?: unknown; newPassword?: unknown; confirmPassword?: unknown };
-    if (typeof body.currentPassword !== 'string' || typeof body.newPassword !== 'string' || typeof body.confirmPassword !== 'string') {
-      return NextResponse.json({ error: 'Current password, new password, and confirmation are required.' }, { status: 400 });
+    const body = await request.json() as { currentPassword?: unknown };
+    if (typeof body.currentPassword !== 'string' || !body.currentPassword) {
+      return NextResponse.json({ error: 'Your current password is required.' }, { status: 400 });
     }
-    if (body.newPassword.length < 8) return NextResponse.json({ error: 'New password must be at least 8 characters long.' }, { status: 400 });
-    if (body.newPassword.length > 128) return NextResponse.json({ error: 'New password must be 128 characters or fewer.' }, { status: 400 });
-    if (body.newPassword !== body.confirmPassword) return NextResponse.json({ error: 'New passwords do not match.' }, { status: 400 });
-    if (body.currentPassword === body.newPassword) return NextResponse.json({ error: 'New password must be different from your current password.' }, { status: 400 });
 
     const database = await getMongoDatabase();
     const user = await database.collection<{ email?: string; password?: string; name?: string }>('users').findOne({ _id: new ObjectId(userId) });
@@ -69,15 +66,22 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: 'Current password is incorrect.' }, { status: 401 });
     }
 
-    const password = await bcrypt.hash(body.newPassword, 12);
-    await database.collection('users').updateOne({ _id: new ObjectId(userId) }, { $set: { password, updatedAt: new Date() } });
+    const token = randomBytes(32).toString('hex');
+    await database.collection('passwordResetTokens').insertOne({
+      userId,
+      tokenHash: createHash('sha256').update(token).digest('hex'),
+      expiresAt: new Date(Date.now() + 30 * 60 * 1000),
+      createdAt: new Date(),
+    });
+    const origin = process.env.AUTH_URL ?? process.env.NEXTAUTH_URL ?? new URL(request.url).origin;
+    const resetUrl = `${origin}/dashboard/account/reset-password?token=${encodeURIComponent(token)}`;
     await sendEmail({
       to: user.email,
-      subject: 'Your OfficeHoursTrack password was updated',
-      text: `Hi ${user.name ?? 'there'}, your OfficeHoursTrack password was updated successfully. If you did not make this change, contact support immediately.`,
-      html: `<p>Hi ${user.name ?? 'there'},</p><p>Your OfficeHoursTrack password was updated successfully.</p><p><strong>If you did not make this change, contact support immediately.</strong></p>`,
+      subject: 'Confirm your OfficeHoursTrack password update',
+      text: `Hi ${user.name ?? 'there'}, use this link to choose a new OfficeHoursTrack password: ${resetUrl}\n\nThis link expires in 30 minutes. If you did not request this, you can ignore this email.`,
+      html: `<p>Hi ${user.name ?? 'there'},</p><p>Click the button below to choose a new OfficeHoursTrack password.</p><p><a href="${resetUrl}" style="display:inline-block;padding:12px 18px;background:#2563eb;color:#fff;text-decoration:none">Update password</a></p><p>This link expires in 30 minutes. If you did not request this, you can ignore this email.</p>`,
     });
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true, message: 'A password update link was sent to your email.' });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unable to update your password.';
     return NextResponse.json({ error: message }, { status: 500 });
