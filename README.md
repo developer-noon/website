@@ -26,6 +26,12 @@ http://localhost:3000/api/auth/callback/google
 
 Email/password registration stores users in the configured MongoDB database. Google sign-in accepts verified Google accounts and links them to an existing account with the same email.
 
+## OfficeHoursTrack workspaces
+
+Users start with an empty OfficeHoursTrack workspace area. From **Dashboard → Team workspace**, a user can create a workspace and invite teammates by email. Invitations expire after seven days and can only be accepted by a signed-in account using the invited email address. Configure `RESEND_API_KEY` and `RESEND_FROM` to enable invitation delivery.
+
+New accounts must verify their email before registration completes. The signup page sends a six-digit code through Resend; codes expire after 15 minutes. In Resend, create an API key and verify the domain used by `RESEND_FROM`. For local testing, Resend's `onboarding@resend.dev` sender can only deliver to the email address associated with your Resend account.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
