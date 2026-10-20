@@ -1,5 +1,3 @@
-export const ALLOWED_OFFICE_HOUR_CLIENTS = ['SUMMER HUNTINGTON', 'PERIOP CONCEPTS', 'Ava Taylor'] as const;
-
 export type OfficeHoursClient = { id: string; name: string; company: string; rate: number; status: 'Active' | 'Archived' };
 export type OfficeHoursProject = { id: string; clientId: string; name: string; status: 'Active' | 'Archived' };
 export type OfficeHoursTeamMember = { id: string; name: string; email: string; status: 'Active' | 'Archived' };
@@ -32,10 +30,6 @@ export type OfficeHoursStore = {
   activeTimer?: { entryId: string; startedAt: string };
 };
 
-export function allowedClientName(name: string) {
-  return ALLOWED_OFFICE_HOUR_CLIENTS.find((allowedName) => allowedName.toLowerCase() === name.trim().toLowerCase());
-}
-
 export function durationToSeconds(value: string | number) {
   if (typeof value === 'number') return Math.max(0, Math.round(value * 3600));
   const parts = value.trim().split(':').map(Number);
@@ -60,11 +54,9 @@ export function sanitizeOfficeHoursStore(store: OfficeHoursStore): OfficeHoursSt
   const rawProjects = Array.isArray(source.projects) ? source.projects : [];
   const rawTeam = Array.isArray(source.team) ? source.team : [];
   const rawReports = Array.isArray(source.reports) ? source.reports : [];
-  const existingClients = rawClients.filter((client) => client && typeof client.name === 'string' && allowedClientName(client.name)).map((client) => ({
-    ...client,
-    name: allowedClientName(client.name) ?? client.name,
-  }));
-  const clients = existingClients;
+  const clients = rawClients
+    .filter((client) => client && typeof client.id === 'string' && typeof client.name === 'string' && client.name.trim())
+    .map((client) => ({ ...client, name: client.name.trim() }));
   const clientIds = new Set(clients.map((client) => client.id));
   const projects = rawProjects.filter((project) => project && typeof project.id === 'string' && clientIds.has(project.clientId) && typeof project.name === 'string').map((project) => ({
     ...project,

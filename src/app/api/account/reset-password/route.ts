@@ -4,9 +4,15 @@ import { ObjectId } from 'mongodb';
 import { NextResponse } from 'next/server';
 import { getMongoDatabase } from '@/lib/mongodb';
 import { sendEmail } from '@/lib/email';
+import { escapeHtml } from '@/lib/html';
+import { APP_NAME } from '@/lib/brand';
+import { clientIp, consumeRateLimit } from '@/lib/rate-limit';
 
 export async function POST(request: Request) {
   try {
+    if (!await consumeRateLimit(`reset-ip:${clientIp(request)}`, 30, 60 * 60 * 1000)) {
+      return NextResponse.json({ error: 'Too many attempts. Try again later.' }, { status: 429 });
+    }
     const body = await request.json() as { token?: unknown; newPassword?: unknown; confirmPassword?: unknown };
     const token = typeof body.token === 'string' ? body.token : '';
     const newPassword = typeof body.newPassword === 'string' ? body.newPassword : '';
@@ -29,9 +35,9 @@ export async function POST(request: Request) {
     await database.collection('passwordResetTokens').deleteMany({ userId: reset.userId });
     await sendEmail({
       to: user.email,
-      subject: 'Your OfficeHoursTrack password was updated',
-      text: `Hi ${user.name ?? 'there'}, your OfficeHoursTrack password was updated successfully. If you did not make this change, contact support immediately.`,
-      html: `<p>Hi ${user.name ?? 'there'},</p><p>Your OfficeHoursTrack password was updated successfully.</p><p><strong>If you did not make this change, contact support immediately.</strong></p>`,
+      subject: `Your ${APP_NAME} password was updated`,
+      text: `Hi ${user.name ?? 'there'}, your ${APP_NAME} password was updated successfully. If you did not make this change, contact support immediately.`,
+      html: `<p>Hi ${escapeHtml(user.name ?? 'there')},</p><p>Your ${APP_NAME} password was updated successfully.</p><p><strong>If you did not make this change, contact support immediately.</strong></p>`,
     });
     return NextResponse.json({ ok: true });
   } catch (error) {

@@ -5,6 +5,8 @@ import { NextResponse } from 'next/server';
 import type { Session } from 'next-auth';
 import bcrypt from 'bcryptjs';
 import { sendEmail } from '@/lib/email';
+import { escapeHtml } from '@/lib/html';
+import { consumeRateLimit } from '@/lib/rate-limit';
 import { createHash, randomBytes } from 'crypto';
 
 function getSessionUserId(session: Session | null) {
@@ -58,6 +60,9 @@ export async function PUT(request: Request) {
     if (typeof body.currentPassword !== 'string' || !body.currentPassword) {
       return NextResponse.json({ error: 'Your current password is required.' }, { status: 400 });
     }
+    if (!await consumeRateLimit(`password-update:${userId}`, 5, 60 * 60 * 1000)) {
+      return NextResponse.json({ error: 'Too many password requests. Try again later.' }, { status: 429 });
+    }
 
     const database = await getMongoDatabase();
     const user = await database.collection<{ email?: string; password?: string; name?: string }>('users').findOne({ _id: new ObjectId(userId) });
@@ -74,12 +79,12 @@ export async function PUT(request: Request) {
       createdAt: new Date(),
     });
     const origin = process.env.AUTH_URL ?? process.env.NEXTAUTH_URL ?? new URL(request.url).origin;
-    const resetUrl = `${origin}/dashboard/account/reset-password?token=${encodeURIComponent(token)}`;
+    const resetUrl = `${origin}/reset-password?token=${encodeURIComponent(token)}`;
     await sendEmail({
       to: user.email,
-      subject: 'Confirm your OfficeHoursTrack password update',
-      text: `Hi ${user.name ?? 'there'}, use this link to choose a new OfficeHoursTrack password: ${resetUrl}\n\nThis link expires in 30 minutes. If you did not request this, you can ignore this email.`,
-      html: `<p>Hi ${user.name ?? 'there'},</p><p>Click the button below to choose a new OfficeHoursTrack password.</p><p><a href="${resetUrl}" style="display:inline-block;padding:12px 18px;background:#2563eb;color:#fff;text-decoration:none">Update password</a></p><p>This link expires in 30 minutes. If you did not request this, you can ignore this email.</p>`,
+      subject: 'Confirm your Deeds n Doings password update',
+      text: `Hi ${user.name ?? 'there'}, use this link to choose a new Deeds n Doings password: ${resetUrl}\n\nThis link expires in 30 minutes. If you did not request this, you can ignore this email.`,
+      html: `<p>Hi ${escapeHtml(user.name ?? 'there')},</p><p>Click the button below to choose a new Deeds n Doings password.</p><p><a href="${escapeHtml(resetUrl)}" style="display:inline-block;padding:12px 18px;background:#9fe870;color:#163300;text-decoration:none">Update password</a></p><p>This link expires in 30 minutes. If you did not request this, you can ignore this email.</p>`,
     });
     return NextResponse.json({ ok: true, message: 'A password update link was sent to your email.' });
   } catch (error) {
@@ -88,16 +93,29 @@ export async function PUT(request: Request) {
   }
 }
 
-export async function DELETE() {
+export async function DELETE(request: Request) {
   const session = await auth();
   const userId = getSessionUserId(session);
   if (!userId) return NextResponse.json({ error: 'Authentication required.' }, { status: 401 });
 
+  const body = await request.json().catch(() => ({})) as { password?: unknown };
   const database = await getMongoDatabase();
   const objectUserId = new ObjectId(userId);
+  const account = await database.collection<{ email?: string; password?: string }>('users').findOne({ _id: objectUserId }, { projection: { email: 1, password: 1 } });
+  if (!account) return NextResponse.json({ error: 'Account not found.' }, { status: 404 });
+
+  // Password accounts must re-confirm with their password; Google-only accounts have none.
+  if (account.password) {
+    if (!await consumeRateLimit(`delete-account:${userId}`, 5, 60 * 60 * 1000)) {
+      return NextResponse.json({ error: 'Too many attempts. Try again later.' }, { status: 429 });
+    }
+    if (typeof body.password !== 'string' || !await bcrypt.compare(body.password, account.password)) {
+      return NextResponse.json({ error: 'Enter your current password to delete your account.' }, { status: 401 });
+    }
+  }
+
   const ownedWorkspaces = await database.collection('workspaces').find({ ownerId: userId }, { projection: { _id: 1 } }).toArray();
   const workspaceIds = ownedWorkspaces.map((workspace) => workspace._id?.toString()).filter((id): id is string => Boolean(id));
-  const account = await database.collection('users').findOne({ _id: objectUserId }, { projection: { email: 1 } });
 
   await database.collection('accountDeletionLogs').insertOne({
     userId,

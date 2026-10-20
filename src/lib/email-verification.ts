@@ -1,8 +1,9 @@
-import { createHash, randomInt, randomBytes } from 'crypto';
+import { createHash, randomInt, randomBytes, timingSafeEqual } from 'crypto';
 import { getMongoDatabase } from '@/lib/mongodb';
 
 const collectionName = 'emailVerifications';
 const verificationLifetimeMs = 15 * 60 * 1000;
+const maxCodeAttempts = 5;
 
 export function normalizeEmail(email: string) {
   return email.trim().toLowerCase();
@@ -25,9 +26,10 @@ export async function createEmailVerification(email: string) {
         codeHash: hash(code),
         verificationTokenHash: hash(token),
         expiresAt: new Date(Date.now() + verificationLifetimeMs),
+        attempts: 0,
         createdAt: new Date(),
       },
-      $unset: { verifiedAt: '', attempts: '' },
+      $unset: { verifiedAt: '' },
     },
     { upsert: true },
   );
@@ -44,17 +46,32 @@ export async function consumeEmailVerification(email: string, token: string) {
   return Boolean(result);
 }
 
+/**
+ * Checks a six-digit code. Each guess is counted atomically before it is compared,
+ * so a code is locked after `maxCodeAttempts` tries however the requests interleave.
+ */
 export async function verifyEmailCode(email: string, code: string) {
   const database = await getMongoDatabase();
-  const token = randomBytes(32).toString('hex');
-  const result = await database.collection(collectionName).findOneAndUpdate(
+  const collection = database.collection<{ _id: unknown; codeHash: string }>(collectionName);
+  const pending = await collection.findOneAndUpdate(
     {
       email: normalizeEmail(email),
-      codeHash: hash(code),
       expiresAt: { $gt: new Date() },
+      verifiedAt: { $exists: false },
+      attempts: { $lt: maxCodeAttempts },
     },
-    { $set: { verifiedAt: new Date(), verificationTokenHash: hash(token), expiresAt: new Date(Date.now() + verificationLifetimeMs) } },
-    { returnDocument: 'after' },
+    { $inc: { attempts: 1 } },
+    { returnDocument: 'before' },
   );
-  return result ? token : null;
+  if (!pending) return null;
+
+  const matches = timingSafeEqual(Buffer.from(pending.codeHash), Buffer.from(hash(code)));
+  if (!matches) return null;
+
+  const token = randomBytes(32).toString('hex');
+  await collection.updateOne(
+    { _id: pending._id },
+    { $set: { verifiedAt: new Date(), verificationTokenHash: hash(token), expiresAt: new Date(Date.now() + verificationLifetimeMs) } },
+  );
+  return token;
 }

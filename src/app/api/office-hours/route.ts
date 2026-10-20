@@ -12,9 +12,8 @@ export async function GET() {
   const collection = database.collection<{ userId: string; store: OfficeHoursStore; updatedAt: Date }>('officeHoursTrack');
   const record = await collection.findOne({ userId }, { projection: { _id: 0, store: 1 } });
   if (!record?.store) return NextResponse.json({ store: null });
-  const store = sanitizeOfficeHoursStore(record.store);
-  await collection.updateOne({ userId }, { $set: { store, updatedAt: new Date() } });
-  return NextResponse.json({ store });
+  // Read-only: writing the sanitized copy back here could overwrite a save that happens concurrently.
+  return NextResponse.json({ store: sanitizeOfficeHoursStore(record.store) });
 }
 
 export async function PUT(request: Request) {
@@ -25,7 +24,7 @@ export async function PUT(request: Request) {
   try {
     const body = await request.json() as { store?: unknown };
     if (!body.store || typeof body.store !== 'object') {
-      return NextResponse.json({ error: 'A valid OfficeHoursTrack store is required.' }, { status: 400 });
+      return NextResponse.json({ error: 'A valid Deeds n Doings store is required.' }, { status: 400 });
     }
     const store = sanitizeOfficeHoursStore(body.store as OfficeHoursStore);
     const database = await getMongoDatabase();
@@ -36,6 +35,6 @@ export async function PUT(request: Request) {
     );
     return NextResponse.json({ ok: true });
   } catch {
-    return NextResponse.json({ error: 'Unable to save OfficeHoursTrack data.' }, { status: 400 });
+    return NextResponse.json({ error: 'Unable to save Deeds n Doings data.' }, { status: 400 });
   }
 }

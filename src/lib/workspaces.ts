@@ -2,6 +2,8 @@ import { createHash, randomBytes } from 'crypto';
 import { ObjectId } from 'mongodb';
 import { getMongoDatabase } from '@/lib/mongodb';
 import { sendEmail } from '@/lib/email';
+import { escapeHtml } from '@/lib/html';
+import { APP_NAME } from '@/lib/brand';
 
 export type WorkspaceDocument = {
   _id?: ObjectId;
@@ -52,12 +54,14 @@ export async function sendWorkspaceInvitation(input: {
   origin: string;
 }) {
   const invitationUrl = `${input.origin}/dashboard/workspace/invite?token=${encodeURIComponent(input.token)}`;
+  const inviter = escapeHtml(input.inviterName);
+  const workspace = escapeHtml(input.workspaceName);
 
   await sendEmail({
     to: input.email,
-    subject: `Join ${input.workspaceName} on OfficeHoursTrack`,
-    text: `${input.inviterName} invited you to join ${input.workspaceName} on OfficeHoursTrack.\n\nAccept the invitation: ${invitationUrl}\n\nThis invitation expires in 7 days.`,
-    html: `<p>${input.inviterName} invited you to join <strong>${input.workspaceName}</strong> on OfficeHoursTrack.</p><p><a href="${invitationUrl}">Accept the invitation</a></p><p>This invitation expires in 7 days.</p>`,
+    subject: `Join ${input.workspaceName} on ${APP_NAME}`,
+    text: `${input.inviterName} invited you to join ${input.workspaceName} on ${APP_NAME}.\n\nAccept the invitation: ${invitationUrl}\n\nThis invitation expires in 7 days.`,
+    html: `<p>${inviter} invited you to join <strong>${workspace}</strong> on ${APP_NAME}.</p><p><a href="${escapeHtml(invitationUrl)}">Accept the invitation</a></p><p>This invitation expires in 7 days.</p>`,
   });
 }
 

@@ -1,13 +1,29 @@
-import NextAuth from 'next-auth';
+import NextAuth, { CredentialsSignin } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import Google from 'next-auth/providers/google';
 import { MongoDBAdapter } from '@auth/mongodb-adapter';
 import bcrypt from 'bcryptjs';
 import clientPromise, { getMongoDatabase } from '@/lib/mongodb';
 import { findUserByEmail } from '@/lib/users';
+import { consumeRateLimit } from '@/lib/rate-limit';
+import { checkSecondFactor, getTwoFactorStatus } from '@/lib/two-factor';
 
 const googleClientId = process.env.AUTH_GOOGLE_ID ?? process.env.GOOGLE_CLIENT_ID ?? '';
 const googleClientSecret = process.env.AUTH_GOOGLE_SECRET ?? process.env.GOOGLE_CLIENT_SECRET ?? '';
+
+/* Error codes are returned to the login page as `code`, so they never reveal whether an email exists. */
+class InvalidCredentialsError extends CredentialsSignin {
+  code = 'credentials';
+}
+class RateLimitedError extends CredentialsSignin {
+  code = 'rate_limited';
+}
+class TwoFactorRequiredError extends CredentialsSignin {
+  code = 'two_factor_required';
+}
+class InvalidTwoFactorError extends CredentialsSignin {
+  code = 'invalid_two_factor';
+}
 
 type AuthUser = {
   id: string;
@@ -23,6 +39,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: MongoDBAdapter(clientPromise),
   session: {
     strategy: 'jwt',
+    maxAge: 60 * 60 * 24 * 7,
   },
   pages: {
     signIn: '/login',
@@ -38,24 +55,36 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       credentials: {
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
+        otp: { label: 'Authentication code', type: 'text' },
       },
       async authorize(credentials: Record<string, unknown> | undefined) {
         const email = String(credentials?.email ?? '').trim().toLowerCase();
         const password = String(credentials?.password ?? '');
+        const otp = String(credentials?.otp ?? '').trim();
 
         if (!email || !password) {
-          return null;
+          throw new InvalidCredentialsError();
+        }
+
+        if (!await consumeRateLimit(`login:${email}`, 10, 15 * 60 * 1000)) {
+          throw new RateLimitedError();
         }
 
         const user = await findUserByEmail(email);
 
         if (!user || !user.password) {
-          return null;
+          throw new InvalidCredentialsError();
         }
 
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
-          return null;
+          throw new InvalidCredentialsError();
+        }
+
+        const { enabled: twoFactorEnabled } = await getTwoFactorStatus(user.id);
+        if (twoFactorEnabled) {
+          if (!otp) throw new TwoFactorRequiredError();
+          if (!await checkSecondFactor(user.id, otp)) throw new InvalidTwoFactorError();
         }
 
         return {

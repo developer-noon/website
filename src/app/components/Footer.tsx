@@ -1,46 +1,59 @@
-'use client';
-
 import Link from 'next/link';
-import { EnvelopeIcon } from '@heroicons/react/24/outline';
+import BrandMark from '@/components/BrandMark';
+import { APP_NAME, APP_TAGLINE } from '@/lib/brand';
+
+const columns = [
+  {
+    title: 'Product',
+    links: [
+      { name: 'Features', href: '/features' },
+      { name: 'Products', href: '/products' },
+      { name: 'Pricing', href: '/pricing' },
+      { name: 'Security', href: '/security' },
+      { name: 'Log in', href: '/login' },
+      { name: 'Sign up', href: '/signup' },
+    ],
+  },
+  {
+    title: 'Company',
+    links: [
+      { name: 'How it works', href: '/process' },
+      { name: 'Use cases', href: '/work' },
+      { name: 'Contact', href: '/contact' },
+    ],
+  },
+  {
+    title: 'Legal',
+    links: [
+      { name: 'Privacy', href: '/privacy' },
+      { name: 'Terms', href: '/terms' },
+    ],
+  },
+];
 
 export default function Footer() {
-  const year = new Date().getFullYear();
-
   return (
-    <footer className="border-t border-[#0B353B]/10 bg-[#0B353B] text-white">
-      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-        <div className="grid gap-10 md:grid-cols-4">
-          <div className="md:col-span-2">
-            <Link href="/" className="text-[1.35rem] font-extrabold tracking-[-0.06em] text-white">
-              Hammad<span className="text-[#ABFFAE]">.</span>
-            </Link>
-            <p className="mt-4 max-w-md text-sm text-white/70">
-              Web development, digital systems, and growth-focused design for businesses that need practical online solutions.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-white/60">Navigation</h3>
-            <ul className="mt-4 space-y-3 text-sm text-white/75">
-              <li><Link href="/" className="transition-colors hover:text-white">Home</Link></li>
-              <li><Link href="/about" className="transition-colors hover:text-white">About</Link></li>
-              <li><Link href="/services" className="transition-colors hover:text-white">Services</Link></li>
-              <li><Link href="/portfolio" className="transition-colors hover:text-white">Portfolio</Link></li>
+    <footer className="band-forest mt-24">
+      <div className="page-frame grid gap-12 py-16 md:grid-cols-[1.5fr_repeat(3,1fr)]">
+        <div>
+          <BrandMark className="h-12 w-12" />
+          <p className="mt-5 max-w-xs text-sm text-white/75">{APP_TAGLINE}</p>
+        </div>
+        {columns.map((column) => (
+          <div key={column.title}>
+            <h3 className="font-display text-base text-[var(--color-primary)]">{column.title}</h3>
+            <ul className="mt-4 space-y-3">
+              {column.links.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="text-sm text-white hover:text-[var(--color-primary)]">{link.name}</Link>
+                </li>
+              ))}
             </ul>
           </div>
-
-          <div>
-            <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-white/60">Connect</h3>
-            <ul className="mt-4 space-y-3 text-sm text-white/75">
-              <li><Link href="/contact" className="transition-colors hover:text-white">Contact</Link></li>
-              <li><a href="mailto:hammadnoon777@gmail.com" className="inline-flex items-center gap-2 transition-colors hover:text-white"><EnvelopeIcon className="h-4 w-4" aria-hidden="true" />hammadnoon777@gmail.com</a></li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="mt-12 border-t border-white/10 pt-8 text-center text-xs text-white/50">
-          © {year} Hammad Younus. All rights reserved.
-        </div>
+        ))}
+      </div>
+      <div className="border-t border-white/15">
+        <p className="page-frame py-6 text-xs text-white/70">© {new Date().getFullYear()} {APP_NAME}</p>
       </div>
     </footer>
   );

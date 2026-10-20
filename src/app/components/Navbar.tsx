@@ -1,138 +1,105 @@
 'use client';
 
-import { signIn, signOut, useSession } from 'next-auth/react';
-import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import { useEffect, useState } from 'react';
+import Logo from '@/components/Logo';
+import ThemeToggle from '@/components/ThemeToggle';
 
-const navLinks = [
-  { name: 'Home', path: '/' },
-  { name: 'About', path: '/about' },
-  { name: 'Services', path: '/services' },
-  { name: 'Portfolio', path: '/portfolio' },
+const links = [
+  { name: 'Features', path: '/features' },
+  { name: 'How it works', path: '/process' },
+  { name: 'Use cases', path: '/work' },
+  { name: 'Pricing', path: '/pricing' },
+  { name: 'Security', path: '/security' },
   { name: 'Contact', path: '/contact' },
 ];
 
 export default function Navbar() {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
+  const pathname = usePathname().replace(/\/$/, '') || '/';
   const [isOpen, setIsOpen] = useState(false);
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [isGoogleSubmitting, setIsGoogleSubmitting] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const isLoggedIn = status === 'authenticated';
 
-  const handleGoogleSignIn = async () => {
-    setIsGoogleSubmitting(true);
-
-    try {
-      await signIn('google', { callbackUrl: '/dashboard' });
-    } catch {
-      setIsGoogleSubmitting(false);
-    }
-  };
+  useEffect(() => {
+    const onScroll = () => setIsScrolled(window.scrollY > 8);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[#0B353B]/10 bg-white/80 backdrop-blur-xl">
-      <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="text-[1.3rem] font-extrabold tracking-[-0.05em] text-[#0B353B]">
-          Hammad<span className="text-[#0B353B]">.</span>
-        </Link>
+    <header className={`sticky top-0 z-50 bg-[var(--color-bg)] transition-shadow duration-300 ${isScrolled ? 'shadow-[0_1px_0_var(--color-border)]' : ''}`}>
+      <nav className="page-frame flex items-center justify-between py-4" aria-label="Main">
+        <Logo />
 
-        <div className="hidden items-center gap-8 md:flex">
-          {navLinks.map((link) => (
-            <Link
-              key={link.path}
-              href={link.path}
-              className="text-sm font-medium text-[#4A5C5F] transition-colors hover:text-[#0B353B]"
-            >
-              {link.name}
-            </Link>
-          ))}
+        <div className="hidden items-center gap-6 md:flex">
+          {links.map((link) => {
+            const active = pathname === link.path;
+            return (
+              <Link
+                key={link.path}
+                href={link.path}
+                aria-current={active ? 'page' : undefined}
+                className={`border-b-[3px] py-1 text-base font-semibold text-[var(--color-ink)] transition-colors duration-200 ${active ? 'border-[var(--color-primary)]' : 'border-transparent hover:border-[var(--color-border-strong)]'}`}
+              >
+                {link.name}
+              </Link>
+            );
+          })}
+        </div>
 
+        <div className="hidden items-center gap-2 md:flex">
           {isLoggedIn ? (
-            <div className="relative flex items-center gap-3">
-              <Link href="/dashboard" className="text-sm font-medium text-[#0B353B] transition-colors hover:text-[#0B353B]">
-                Dashboard
-              </Link>
-              <button type="button" onClick={() => setIsProfileOpen((value) => !value)} className="flex items-center gap-2 rounded-none border border-[#0B353B]/10 bg-[#FAFAF9] p-1 pr-3 text-sm font-medium text-[#0B353B] transition-colors hover:bg-[#F1F5F5]" aria-expanded={isProfileOpen} aria-label="Open profile menu">
-                {session?.user?.image ? <Image src={session.user.image} alt="" width={32} height={32} className="h-8 w-8 rounded-none object-cover" /> : <span className="flex h-8 w-8 items-center justify-center rounded-none bg-[#ABFFAE] text-xs font-bold">{session?.user?.name?.charAt(0) ?? 'U'}</span>}
-                <span className="hidden lg:inline">{session?.user?.name?.split(' ')[0] ?? 'Account'}</span>
-              </button>
-              {isProfileOpen && <div className="absolute right-0 top-12 w-44 rounded-none border border-[#0B353B]/10 bg-white p-2 shadow-[0_18px_40px_rgba(12,31,35,0.12)]"><Link href="/dashboard" onClick={() => setIsProfileOpen(false)} className="block rounded-none px-3 py-2 text-sm text-[#0B353B] hover:bg-[#FAFAF9]">Dashboard</Link><button type="button" onClick={() => signOut({ callbackUrl: '/' })} className="w-full rounded-none px-3 py-2 text-left text-sm text-[#0B353B] hover:bg-[#FAFAF9]">Logout</button></div>}
-            </div>
+            <Link href="/dashboard" className="cta-primary !px-5 !py-3 text-sm">Dashboard</Link>
           ) : (
-            <div className="flex items-center gap-3">
-              <Link href="/signup" className="cta-primary text-sm">
-                Sign up
-              </Link>
-              <button type="button" onClick={handleGoogleSignIn} disabled={isGoogleSubmitting || status === 'loading'} className="rounded-none border border-[#0B353B]/10 bg-[#FAFAF9] px-4 py-2 text-sm font-medium text-[#0B353B] transition-colors hover:bg-[#F1F5F5] disabled:cursor-not-allowed disabled:opacity-60">
-                {isGoogleSubmitting ? 'Connecting...' : 'Sign in with Google'}
-              </button>
-              <Link href="/login" className="text-sm font-medium text-[#4A5C5F] transition-colors hover:text-[#0B353B]">
-                Log in
-              </Link>
-            </div>
+            <>
+              <Link href="/login" className="cta-ghost">Log in</Link>
+              <Link href="/signup" className="cta-primary !px-5 !py-3 text-sm">Sign up</Link>
+            </>
           )}
         </div>
 
+        <ThemeToggle />
+
         <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="rounded-none p-2 text-[#0B353B] transition-colors hover:bg-[#0B353B]/5 md:hidden"
-          aria-label="Toggle Menu"
+          type="button"
+          onClick={() => setIsOpen((value) => !value)}
+          className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-[var(--color-ink)] md:hidden"
+          aria-expanded={isOpen}
+          aria-controls="mobile-menu"
+          aria-label={isOpen ? 'Close menu' : 'Open menu'}
         >
-          <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            {isOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            )}
-          </svg>
+          <span className="relative block h-3.5 w-5" aria-hidden="true">
+            <span className={`absolute left-0 top-0 h-0.5 w-5 rounded bg-current transition-transform duration-300 ${isOpen ? 'translate-y-[7px] rotate-45' : ''}`} />
+            <span className={`absolute bottom-0 left-0 h-0.5 w-5 rounded bg-current transition-transform duration-300 ${isOpen ? '-translate-y-[7px] -rotate-45' : ''}`} />
+          </span>
         </button>
       </nav>
 
-      {isOpen && (
-        <div className="border-t border-[#0B353B]/10 bg-white px-4 pb-4 pt-3 md:hidden">
-          {navLinks.map((link) => (
-            <Link
-              key={link.path}
-              href={link.path}
-              onClick={() => setIsOpen(false)}
-              className="block rounded-none px-3 py-2 text-base font-medium text-[#0B353B] transition-colors hover:bg-[#0B353B]/5"
-            >
+      <div
+        id="mobile-menu"
+        className={`overflow-hidden bg-[var(--color-bg)] transition-[max-height,opacity] duration-300 md:hidden ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}
+      >
+        <div className="flex flex-col gap-2 px-5 pb-6 pt-2">
+          {links.map((link) => (
+            <Link key={link.path} href={link.path} onClick={() => setIsOpen(false)} className="rounded-2xl px-4 py-3 text-lg font-bold text-[var(--color-ink)] hover:bg-[var(--color-surface-raised)]">
               {link.name}
             </Link>
           ))}
-
-          {isLoggedIn ? (
-            <div className="mt-3 flex flex-col gap-2">
-              <Link href="/dashboard" onClick={() => setIsOpen(false)} className="rounded-none border border-[#0B353B]/10 px-3 py-2 text-center text-sm font-medium text-[#0B353B] hover:bg-[#0B353B]/5">
-                Dashboard
-              </Link>
-              <button
-                type="button"
-                onClick={() => {
-                  setIsOpen(false);
-                  signOut({ callbackUrl: '/' });
-                }}
-                className="cta-primary w-full text-sm"
-              >
-                Logout
-              </button>
-            </div>
-          ) : (
-            <div className="mt-3 flex flex-col gap-2">
-              <Link href="/signup" onClick={() => setIsOpen(false)} className="cta-primary w-full text-sm">
-                Sign up
-              </Link>
-              <button type="button" onClick={handleGoogleSignIn} disabled={isGoogleSubmitting || status === 'loading'} className="rounded-none border border-[#0B353B]/10 px-3 py-2 text-center text-sm font-medium text-[#0B353B] hover:bg-[#0B353B]/5 disabled:cursor-not-allowed disabled:opacity-60">
-                {isGoogleSubmitting ? 'Connecting...' : 'Sign in with Google'}
-              </button>
-              <Link href="/login" onClick={() => setIsOpen(false)} className="rounded-none border border-[#0B353B]/10 px-3 py-2 text-center text-sm font-medium text-[#0B353B] hover:bg-[#0B353B]/5">
-                Log in
-              </Link>
-            </div>
-          )}
+          <div className="mt-3 grid grid-cols-2 gap-3">
+            {isLoggedIn ? (
+              <Link href="/dashboard" className="cta-primary col-span-2">Dashboard</Link>
+            ) : (
+              <>
+                <Link href="/login" className="cta-secondary">Log in</Link>
+                <Link href="/signup" className="cta-primary">Sign up</Link>
+              </>
+            )}
+          </div>
         </div>
-      )}
+      </div>
     </header>
   );
 }

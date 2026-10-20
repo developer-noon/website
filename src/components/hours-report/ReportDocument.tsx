@@ -1,6 +1,9 @@
 import { Document, Image, Page, StyleSheet, Text, View } from '@react-pdf/renderer';
 import type { Report, ReportMeta } from '@/lib/hours-report/types';
 
+// Brand accent, using the darker light-mode violet from the global theme so it prints well.
+const ACCENT = '#6340f0';
+
 const styles = StyleSheet.create({
   page: { padding: 40, fontFamily: 'Helvetica', fontSize: 8, color: '#222' },
   head: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 28 },
@@ -8,16 +11,16 @@ const styles = StyleSheet.create({
   right: { alignItems: 'flex-end' },
   title: { fontSize: 22, letterSpacing: 5, marginBottom: 6 },
   meta: { fontSize: 7.5, lineHeight: 1.35 },
-  bar: { flexDirection: 'row', backgroundColor: '#2b2b2b', borderRadius: 4, paddingVertical: 8, paddingHorizontal: 14, marginBottom: 8 },
+  bar: { flexDirection: 'row', backgroundColor: ACCENT, borderRadius: 4, paddingVertical: 8, paddingHorizontal: 14, marginBottom: 8 },
   th: { color: '#fff', fontFamily: 'Helvetica-Bold', fontSize: 8.5 },
   date: { width: 85 },
   project: { flex: 1, paddingRight: 12 },
   time: { width: 70, textAlign: 'right' },
-  sectionTitle: { fontFamily: 'Helvetica-Bold', fontSize: 8.5, marginTop: 14, marginBottom: 6 },
+  sectionTitle: { fontFamily: 'Helvetica-Bold', fontSize: 8.5, color: ACCENT, marginTop: 14, marginBottom: 6 },
   row: { flexDirection: 'row', paddingVertical: 5, paddingHorizontal: 14, borderBottomWidth: 0.5, borderBottomColor: '#bdbdbd' },
   subtotal: { fontFamily: 'Helvetica-Bold', fontSize: 8.5, textAlign: 'right', marginTop: 8, paddingRight: 14 },
-  grand: { flexDirection: 'row', justifyContent: 'space-between', borderTopWidth: 1, borderTopColor: '#2b2b2b', marginTop: 14, paddingTop: 8, paddingHorizontal: 2 },
-  grandText: { fontFamily: 'Helvetica-Bold', fontSize: 9 },
+  grand: { flexDirection: 'row', justifyContent: 'space-between', borderTopWidth: 1.5, borderTopColor: ACCENT, marginTop: 14, paddingTop: 8, paddingHorizontal: 2 },
+  grandText: { fontFamily: 'Helvetica-Bold', fontSize: 9, color: ACCENT },
 });
 
 function HeaderBar() {

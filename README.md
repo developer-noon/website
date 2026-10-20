@@ -1,20 +1,12 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# OfficeHoursTrack
 
-## Getting Started
+OfficeHoursTrack is a public marketing site and web app for tracking office hours, grouping them by client, closing billing cycles, and calculating payout.
 
-First, run the development server:
+## Getting started
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. Install dependencies with `npm install`.
+2. Copy `.env.example` to `.env.local` and fill in the values.
+3. Run `npm run dev` and open [http://localhost:3000](http://localhost:3000).
 
 ## Authentication setup
 
@@ -58,17 +50,9 @@ For Vercel, import this repository, add the same environment variables for the r
 
 Never commit `.env.local` or copy local development credentials into production. Rotate any credentials that have been exposed outside the hosting provider.
 
-## Learn More
+## Security notes
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Sign-in can require an authenticator code (two-step verification). Secrets are encrypted with `AUTH_SECRET`; rotating it invalidates existing two-step secrets.
+- Rate limits are stored in MongoDB collection `rateLimits`. Its TTL index removes expired counters automatically.
+- Verification codes lock after five wrong guesses. Reset links and invitations are single-use and expire.
+- Security headers are set in `next.config.ts`.

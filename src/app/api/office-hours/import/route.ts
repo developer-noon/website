@@ -1,7 +1,7 @@
 import { auth } from '@/auth';
 import { getMongoDatabase } from '@/lib/mongodb';
 import { NextResponse } from 'next/server';
-import { allowedClientName, sanitizeOfficeHoursStore, type OfficeHoursEntry as Entry, type OfficeHoursStore } from '@/lib/office-hours';
+import { sanitizeOfficeHoursStore, type OfficeHoursEntry as Entry, type OfficeHoursStore } from '@/lib/office-hours';
 
 function parseCsv(text: string): string[][] {
   const rows: string[][] = [];
@@ -129,12 +129,10 @@ export async function POST(request: Request) {
       if (row[arrivalIndex]?.trim()) currentArrival = parseTime(row[arrivalIndex].trim());
       if (row[leavingIndex]?.trim()) currentLeaving = parseTime(row[leavingIndex].trim());
       if (!currentDate) throw new Error(`A client row has no date before it: ${clientName}`);
-      const canonicalName = allowedClientName(clientName);
-      if (!canonicalName) continue;
-      let client = clientsByName.get(canonicalName.toLowerCase());
+      let client = clientsByName.get(clientName.toLowerCase());
       if (!client) {
-        client = { id: makeId(), name: canonicalName, company: canonicalName, rate: 2475, status: 'Active' };
-        clientsByName.set(canonicalName.toLowerCase(), client);
+        client = { id: makeId(), name: clientName, company: clientName, rate: 0, status: 'Active' };
+        clientsByName.set(clientName.toLowerCase(), client);
         store.clients.push(client);
       }
       importedEntries.push({

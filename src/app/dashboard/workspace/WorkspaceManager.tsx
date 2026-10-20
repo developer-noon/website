@@ -1,8 +1,14 @@
 'use client';
 
-import { FormEvent, useEffect, useState } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
+import { ArrowPathIcon, CheckIcon, EnvelopeIcon, PlusIcon, UserGroupIcon } from '@heroicons/react/24/outline';
+import EmptyState from '@/components/ui/EmptyState';
+import { Feedback } from '@/components/ui/Feedback';
 
 type Workspace = { id: string; name: string; description: string; role: 'owner' | 'member'; createdAt: string };
+
+const field = 'field';
+const label = 'grid gap-2 text-sm font-bold text-[var(--color-ink)]';
 
 export default function WorkspaceManager() {
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
@@ -10,69 +16,131 @@ export default function WorkspaceManager() {
   const [description, setDescription] = useState('');
   const [email, setEmail] = useState('');
   const [selectedWorkspaceId, setSelectedWorkspaceId] = useState('');
-  const [message, setMessage] = useState('');
-  const [error, setError] = useState('');
+  const [notice, setNotice] = useState<{ tone: 'success' | 'error'; label: string } | null>(null);
   const [loading, setLoading] = useState(true);
+  const [busy, setBusy] = useState(false);
 
   const load = async () => {
     const response = await fetch('/api/workspace');
     const payload = await response.json() as { workspaces?: Workspace[]; error?: string };
-    if (!response.ok) throw new Error(payload.error ?? 'Unable to load workspaces.');
+    if (!response.ok) throw new Error(payload.error ?? 'Error');
     setWorkspaces(payload.workspaces ?? []);
     setSelectedWorkspaceId((current) => current || payload.workspaces?.[0]?.id || '');
   };
 
   useEffect(() => {
     const task = window.setTimeout(() => {
-      void load().catch((reason: unknown) => setError(reason instanceof Error ? reason.message : 'Unable to load workspaces.')).finally(() => setLoading(false));
+      void load()
+        .catch((reason: unknown) => setNotice({ tone: 'error', label: reason instanceof Error ? reason.message : 'Error' }))
+        .finally(() => setLoading(false));
     }, 0);
     return () => window.clearTimeout(task);
   }, []);
 
   const createWorkspace = async (event: FormEvent) => {
     event.preventDefault();
-    setMessage('');
-    setError('');
+    setNotice(null);
+    setBusy(true);
     const response = await fetch('/api/workspace', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, description }) });
     const payload = await response.json() as { workspace?: Workspace; error?: string };
-    if (!response.ok) { setError(payload.error ?? 'Unable to create workspace.'); return; }
+    setBusy(false);
+    if (!response.ok) { setNotice({ tone: 'error', label: payload.error ?? 'Error' }); return; }
     setName('');
     setDescription('');
-    setMessage('Workspace created.');
+    setNotice({ tone: 'success', label: 'Created' });
     await load();
     if (payload.workspace) setSelectedWorkspaceId(payload.workspace.id);
   };
 
   const invite = async (event: FormEvent) => {
     event.preventDefault();
-    setMessage('');
-    setError('');
+    setNotice(null);
+    setBusy(true);
     const response = await fetch('/api/workspace/invitations', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ workspaceId: selectedWorkspaceId, email }) });
     const payload = await response.json() as { error?: string };
-    if (!response.ok) { setError(payload.error ?? 'Unable to send invitation.'); return; }
+    setBusy(false);
+    if (!response.ok) { setNotice({ tone: 'error', label: payload.error ?? 'Error' }); return; }
     setEmail('');
-    setMessage('Invitation sent. It expires in 7 days.');
+    setNotice({ tone: 'success', label: 'Sent' });
   };
 
-  if (loading) return <p className="text-sm text-[#64748b]">Loading your workspaces…</p>;
+  if (loading) {
+    return <div className="flex justify-center py-24"><ArrowPathIcon className="h-10 w-10 spin text-[var(--color-ink)]" aria-hidden="true" /></div>;
+  }
+
+  const selected = workspaces.find((workspace) => workspace.id === selectedWorkspaceId);
 
   return (
     <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-      <section className="border border-[#dbe3ee] bg-white p-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#64748b]">Your teams</p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-[-0.05em] text-[#0B353B]">OfficeHoursTrack workspace</h1>
-        {error ? <p className="mt-4 border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p> : null}
-        {message ? <p className="mt-4 border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">{message}</p> : null}
-        {workspaces.length ? <div className="mt-6 space-y-3">{workspaces.map((workspace) => <button type="button" key={workspace.id} onClick={() => setSelectedWorkspaceId(workspace.id)} className={`w-full border p-4 text-left ${selectedWorkspaceId === workspace.id ? 'border-[#3C853C] bg-[#F2FBF0]' : 'border-[#e5e7eb]'}`}><span className="font-semibold text-[#0B353B]">{workspace.name}</span><span className="mt-1 block text-sm text-[#64748b]">{workspace.description || 'No description added.'} · {workspace.role}</span></button>)}</div> : <p className="mt-6 border border-dashed border-[#cbd5e1] p-6 text-sm text-[#64748b]">You are not in a workspace yet. Create one to start with an empty OfficeHoursTrack workspace, or accept an invitation from a teammate.</p>}
+      <section className="panel p-7 sm:p-9">
+        <h1 className="text-[clamp(2rem,4vw,2.6rem)]">Team</h1>
+        {notice ? <div className="mt-8"><Feedback tone={notice.tone} label={notice.label} /></div> : null}
+
+        {workspaces.length ? (
+          <div className="mt-8 grid gap-3">
+            {workspaces.map((workspace) => {
+              const isSelected = selectedWorkspaceId === workspace.id;
+              return (
+                <button
+                  type="button"
+                  key={workspace.id}
+                  onClick={() => setSelectedWorkspaceId(workspace.id)}
+                  aria-pressed={isSelected}
+                  className={`flex items-center gap-6 rounded-[24px] border-2 p-7 text-left transition-all duration-200 ${isSelected
+                    ? 'border-[var(--color-ink)] bg-[var(--color-mint)]'
+                    : 'border-[var(--color-border)] bg-[var(--color-surface)] hover:border-[var(--color-ink)]'}`}
+                >
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[var(--color-primary)] text-[var(--color-on-primary)]">
+                    <UserGroupIcon className="h-6 w-6" aria-hidden="true" />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate font-extrabold text-[var(--color-ink)]">{workspace.name}</span>
+                    <span className="block truncate text-sm text-[var(--color-text-muted)]">{workspace.description || workspace.role}</span>
+                  </span>
+                  {isSelected ? <CheckIcon className="h-6 w-6 shrink-0 text-[var(--color-ink)]" aria-hidden="true" /> : null}
+                </button>
+              );
+            })}
+          </div>
+        ) : (
+          <EmptyState scene="team" title="No team yet" />
+        )}
       </section>
+
       <div className="space-y-6">
-        <form onSubmit={createWorkspace} className="border border-[#dbe3ee] bg-white p-6">
-          <h2 className="text-lg font-semibold text-[#0B353B]">Create a workspace</h2>
-          <input className="input mt-4" placeholder="Team name" value={name} onChange={(event) => setName(event.target.value)} required maxLength={100} />
-          <textarea className="input mt-3 min-h-24" placeholder="What is this team working on?" value={description} onChange={(event) => setDescription(event.target.value)} maxLength={300} />
-          <button className="cta-primary mt-4 w-full" type="submit">Create team</button>
+        <form onSubmit={createWorkspace} className="panel p-7">
+          <h2 className="flex items-center gap-2 text-2xl"><PlusIcon className="h-6 w-6" aria-hidden="true" /> New</h2>
+          <div className="mt-8 grid gap-6">
+            <label className={label}>
+              Name
+              <input className={field} value={name} onChange={(event) => setName(event.target.value)} required maxLength={100} />
+            </label>
+            <label className={label}>
+              About
+              <textarea className={`${field} min-h-24`} value={description} onChange={(event) => setDescription(event.target.value)} maxLength={300} />
+            </label>
+            <button className="cta-primary w-full" type="submit" disabled={busy}>
+              {busy ? <ArrowPathIcon className="h-5 w-5 spin" aria-hidden="true" /> : <CheckIcon className="h-5 w-5" aria-hidden="true" />}
+              {busy ? "Saving" : "Create team"}
+            </button>
+          </div>
         </form>
-        {selectedWorkspaceId && workspaces.find((workspace) => workspace.id === selectedWorkspaceId)?.role === 'owner' ? <form onSubmit={invite} className="border border-[#dbe3ee] bg-white p-6"><h2 className="text-lg font-semibold text-[#0B353B]">Invite a teammate</h2><p className="mt-2 text-sm text-[#64748b]">We will email a secure invitation link that expires in 7 days.</p><input className="input mt-4" type="email" placeholder="teammate@example.com" value={email} onChange={(event) => setEmail(event.target.value)} required /><button className="cta-primary mt-4 w-full" type="submit">Send invitation</button></form> : null}
+
+        {selected?.role === 'owner' ? (
+          <form onSubmit={invite} className="panel p-7">
+            <h2 className="flex items-center gap-2 text-2xl"><EnvelopeIcon className="h-6 w-6" aria-hidden="true" /> Invite</h2>
+            <div className="mt-8 grid gap-6">
+              <label className={label}>
+                Email
+                <input className={field} type="email" value={email} onChange={(event) => setEmail(event.target.value)} required />
+              </label>
+              <button className="cta-primary w-full" type="submit" disabled={busy}>
+                {busy ? <ArrowPathIcon className="h-5 w-5 spin" aria-hidden="true" /> : <EnvelopeIcon className="h-5 w-5" aria-hidden="true" />}
+                {busy ? "Sending" : "Send invite"}
+              </button>
+            </div>
+          </form>
+        ) : null}
       </div>
     </div>
   );
